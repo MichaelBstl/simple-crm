@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.32126.315
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "simpleCrm.web", "simpleCrm.web\simpleCrm.web.csproj", "{DD2312F3-AF37-48BB-AB57-D0FD6CCAD6DA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleCrm.web", "simpleCrm.web\SimpleCrm.web.csproj", "{DD2312F3-AF37-48BB-AB57-D0FD6CCAD6DA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleCrm", "SimpleCrm\SimpleCrm.csproj", "{AF4BC1FC-8530-4308-BAC4-BC881474DE69}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleCrm", "SimpleCrm\SimpleCrm.csproj", "{AF4BC1FC-8530-4308-BAC4-BC881474DE69}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

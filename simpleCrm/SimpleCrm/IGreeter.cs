@@ -4,8 +4,8 @@ using System.Text;
 
 namespace SimpleCrm
 {
-    class TestClass
+    public interface IGreeter
     {
-
+        string GetGreeting();
     }
 }

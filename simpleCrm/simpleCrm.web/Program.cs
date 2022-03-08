@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace simpleCrm.web
+namespace SimpleCrm.web
 {
     public class Program
     {
