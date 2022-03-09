@@ -33,6 +33,16 @@ namespace SimpleCrm.web
             {
                 app.UseDeveloperExceptionPage();
             }
+            else
+            {
+                app.UseExceptionHandler(new ExceptionHandlerOptions
+                {
+                    ExceptionHandler = context =>
+
+                        context.Response.WriteAsync("Oops!")
+
+                });
+            }
             // UseWelcomePage is a terminal piece of middleware.  Use only for testing.
             app.UseWelcomePage(new WelcomePageOptions {Path="/welcome"});
 
