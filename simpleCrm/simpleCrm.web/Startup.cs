@@ -43,6 +43,13 @@ namespace SimpleCrm.web
 
                 });
             }
+            // order matters!!!
+            // UseFileServer does the saame thing as UseDefaultFiles & UseStaticFiles
+            app.UseFileServer();
+            // Same as UseFileServer ***duplicate comment***
+            //app.UseDefaultFiles();
+            //app.UseStaticFiles();
+
             // UseWelcomePage is a terminal piece of middleware.  Use only for testing.
             app.UseWelcomePage(new WelcomePageOptions {Path="/welcome"});
 
@@ -50,7 +57,7 @@ namespace SimpleCrm.web
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapGet("/", async context =>
+                endpoints.MapGet("/hello", async context =>
                 {
                     var greeting = greeter.GetGreeting();
                     await context.Response.WriteAsync(greeting);
