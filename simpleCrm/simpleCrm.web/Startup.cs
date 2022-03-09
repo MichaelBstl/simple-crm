@@ -23,6 +23,8 @@ namespace SimpleCrm.web
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddMvc();
+
             services.AddSingleton<IGreeter, ConfigurationGreeter>();
         }
 
@@ -43,25 +45,14 @@ namespace SimpleCrm.web
 
                 });
             }
-            // order matters!!!
-            // UseFileServer does the saame thing as UseDefaultFiles & UseStaticFiles
-            app.UseFileServer();
-            // Same as UseFileServer ***duplicate comment***
-            //app.UseDefaultFiles();
-            //app.UseStaticFiles();
-
-            // UseWelcomePage is a terminal piece of middleware.  Use only for testing.
-            app.UseWelcomePage(new WelcomePageOptions {Path="/welcome"});
+            app.UseStaticFiles();
+            app.UseWelcomePage(new WelcomePageOptions { Path = "/welcome" });
 
             app.UseRouting();
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapGet("/hello", async context =>
-                {
-                    var greeting = greeter.GetGreeting();
-                    await context.Response.WriteAsync(greeting);
-                });
+                endpoints.MapDefaultControllerRoute();
             });
         }
     }
