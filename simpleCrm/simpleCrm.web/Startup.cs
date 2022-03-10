@@ -54,15 +54,7 @@ namespace SimpleCrm.web
             {
                 endpoints.MapControllerRoute(
                     name: "default", 
-                    "{controller=Home}/{action=Index}/{id?}"
-                );
-/*                endpoints.MapControllerRoute(
-                    name: "contact",
-                    pattern: "Contact/{phone}",
-                    constraints: new { phone = "^\\d{3}-\\d{3}-\\d{4}$" },
-                    defaults: new { controller = "Contact", action = "List" }
-                );
-*/ 
+                    "{controller=Home}/{action=Index}/{id?}");
                 });
 
             app.Run(ctx => ctx.Response.WriteAsync("Not Found"));

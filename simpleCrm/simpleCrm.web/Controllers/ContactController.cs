@@ -6,27 +6,22 @@ using System.Threading.Tasks;
 
 namespace SimpleCrm.web.Controllers
 {
-    [Route("about")]
-    public class AboutController
+    [Route("contact")]
+    public class ContactController
     {
         [Route("phone")]
         public string Phone()
         {
-            return "A99-999-9999";
+            return "999-999-9999";
         }
         [Route("name")]
         public string Name()
         {
-            return "MichaelA";
-        }
-        [Route("address")]
-        public string Address()
-        {
-            return "4575 Cromwell Drive";
+            return "Michael";
         }
         public string Blank()
         {
-            return "Add name or phone to this url(aboutController)";
+            return "Add name or phone to this url";
         }
     }
 }
