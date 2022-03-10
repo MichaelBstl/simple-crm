@@ -1,6 +1,10 @@
-﻿namespace SimpleCrm.web.Model
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace SimpleCrm
 {
-    public class CostomerModel
+    public class Customer
     {
         public int Id { get; set; }
         public string FirstName { get; set; }
