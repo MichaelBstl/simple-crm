@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SimpleCrm.web.Models;
+using System;
 using System.Linq;
 
 namespace SimpleCrm.web.Controllers
@@ -25,9 +26,26 @@ namespace SimpleCrm.web.Controllers
             return View(cust);
         }
 
+        [HttpGet()]
         public IActionResult Create()
         {
             return View();
+        }
+        [HttpPost()]
+        public IActionResult Create(Customer model)
+        {
+            var customer = new Customer
+            {
+                FirstName = model.FirstName,
+                LastName = model.LastName,
+                PhoneNumber = model.PhoneNumber,
+                OptInNewsletter = model.OptInNewsletter,
+                Type = model.Type
+            };
+            _customerData.Save(customer);
+
+            return View(nameof(Details), customer);
+
         }
         public IActionResult Index()
         {

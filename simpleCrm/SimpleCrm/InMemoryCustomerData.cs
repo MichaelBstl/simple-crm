@@ -5,9 +5,9 @@ namespace SimpleCrm
 {
     public class InMemoryCustomerData : ICustomerData
     {
-        IList<Customer> _customers; //not thread safe - only ok for development, single user
+        static IList<Customer> _customers; //not thread safe - only ok for development, single user
 
-        public InMemoryCustomerData()
+        static InMemoryCustomerData()
         {
             _customers = new List<Customer>
                   {
@@ -29,6 +29,12 @@ namespace SimpleCrm
         {
             var customer = _customers;
             return customer;
+        }
+
+        public void Save(Customer customer)
+        {
+            customer.Id = _customers.Max(a => a.Id) + 1;
+            _customers.Add(customer);
         }
     }
 }
