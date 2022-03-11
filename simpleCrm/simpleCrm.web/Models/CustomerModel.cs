@@ -1,6 +1,6 @@
 ﻿namespace SimpleCrm.web.Models
 {
-    public class CostomerModel
+    public class CustomerModel
     {
         public int Id { get; set; }
         public string FirstName { get; set; }
