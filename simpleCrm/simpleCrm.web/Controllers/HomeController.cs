@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SimpleCrm.web.Models;
+using SimpleCrm.Web.Models.Home;
 using System;
 using System.Linq;
 
@@ -32,7 +33,7 @@ namespace SimpleCrm.web.Controllers
             return View();
         }
         [HttpPost()]
-        public IActionResult Create(Customer model)
+        public IActionResult Create(CustomerEditViewModel model)
         {
             var customer = new Customer
             {
@@ -44,7 +45,7 @@ namespace SimpleCrm.web.Controllers
             };
             _customerData.Save(customer);
 
-            return View(nameof(Details), customer);
+            return RedirectToAction(nameof(Details), new { Id = customer.Id });
 
         }
         public IActionResult Index()
