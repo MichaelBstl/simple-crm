@@ -5,18 +5,12 @@
     <title>Simple CRM</title>
 </head>
 <body>
-    <h1>Customers</h1>
-    <p>
-        @Model.FirstName
-    </p>
-    <table>
-        <tr>
-            <td>@Model.Id</td>
-            <td>@Model.FirstName</td>
-            <td>@Model.LastName</td>
-            <td>@Model.PhoneNumber</td>
-            <td> <a href="/home/@nameof(HomeController.Index)">Back</a></td>
-        </tr>
-    </table>
+    <h1>@Model.LastName</h1>
+    <div>
+        @Model.Id   @Model.FirstName  @Model.LastName   @Model.PhoneNumber
+    </div>
+    <div>
+        @Html.ActionLink("Back", nameof(HomeController.Index))
+    </div>
 </body>
 </html>
