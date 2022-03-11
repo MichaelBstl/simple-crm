@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SimpleCrm.web.Models;
+using System.Linq;
 
 namespace SimpleCrm.web.Controllers
 {
@@ -12,6 +13,16 @@ namespace SimpleCrm.web.Controllers
         {
             _customerData = customerData;
             _greeter = greeter;
+        }
+
+        public IActionResult Details(int id)
+        {
+            Customer cust = _customerData.Get(id);
+            if (cust == null)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+            return View(cust);
         }
         public IActionResult Index()
         {

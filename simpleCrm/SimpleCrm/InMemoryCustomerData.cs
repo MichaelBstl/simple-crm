@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace SimpleCrm
 {
@@ -19,9 +20,15 @@ namespace SimpleCrm
                   };
         }
 
+        public Customer Get(int id)
+        {
+            return (from c in _customers where c.Id == id select c).FirstOrDefault();
+        }
+
         public IEnumerable<Customer> GetAll()
         {
-            return _customers;
+            var customer = _customers;
+            return customer;
         }
     }
 }

@@ -1,0 +1,22 @@
+﻿@using SimpleCrm.web.Controllers
+@model SimpleCrm.Customer
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Simple CRM</title>
+</head>
+<body>
+    <h1>Customers</h1>
+    <p>
+        @Model.FirstName
+    </p>
+    <table>
+        <tr>
+            <td>@Model.Id</td>
+            <td>@Model.FirstName</td>
+            <td>@Model.LastName</td>
+            <td>@Model.PhoneNumber</td>
+            <td> <a href="/home/@nameof(HomeController.Index)">Back</a></td>
+        </tr>
+    </table>
+</body>
+</html>
