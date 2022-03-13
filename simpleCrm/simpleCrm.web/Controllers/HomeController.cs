@@ -33,19 +33,24 @@ namespace SimpleCrm.web.Controllers
             return View();
         }
         [HttpPost()]
+        [ValidateAntiForgeryToken()]
         public IActionResult Create(CustomerEditViewModel model)
         {
-            var customer = new Customer
+            if (ModelState.IsValid)
             {
-                FirstName = model.FirstName,
-                LastName = model.LastName,
-                PhoneNumber = model.PhoneNumber,
-                OptInNewsletter = model.OptInNewsletter,
-                Type = model.Type
-            };
-            _customerData.Save(customer);
+                var customer = new Customer
+                {
+                    FirstName = model.FirstName,
+                    LastName = model.LastName,
+                    PhoneNumber = model.PhoneNumber,
+                    OptInNewsletter = model.OptInNewsletter,
+                    Type = model.Type
+                };
+                _customerData.Save(customer);
 
-            return RedirectToAction(nameof(Details), new { Id = customer.Id });
+                return RedirectToAction(nameof(Details), new { Id = customer.Id });
+            }
+            return View();
 
         }
         public IActionResult Index()
