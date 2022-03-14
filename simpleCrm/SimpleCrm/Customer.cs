@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace SimpleCrm
@@ -7,10 +8,17 @@ namespace SimpleCrm
     public class Customer
     {
         public int Id { get; set; }
+        [Required]
+        [MaxLength(50)]
         public string FirstName { get; set; }
+        [Required]
+        [MinLength(1),  MaxLength(30)]
         public string LastName { get; set; }
+        [MinLength(7), MaxLength(12)]
         public string PhoneNumber { get; set; }
-        public CustomerType Type { get; set; }
+        [Display(Name = "Request News Letter")]
         public bool OptInNewsletter { get; set; }
+        [Display(Name = "Customer Type")]
+        public CustomerType Type { get; set; }
     }
 }
