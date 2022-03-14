@@ -1,11 +1,14 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SimpleCrm.SqlDbServices\SimpleCrm.SqlDbServices.csproj" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.23" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\SimpleCrm\SimpleCrm.csproj" />
   </ItemGroup>
 
