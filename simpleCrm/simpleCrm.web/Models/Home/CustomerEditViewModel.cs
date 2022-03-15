@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace SimpleCrm.Web.Models.Home
+namespace SimpleCrm.web.Models.Home
 {
     public class CustomerEditViewModel
     {
