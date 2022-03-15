@@ -1,26 +1,26 @@
 ﻿@using SimpleCrm.web.Controllers
 @model SimpleCrm.web.Models.HomePageViewModel
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <title>Simple CRM</title>
-</head>
-<body>
-    <h1>Customers</h1>
-    <p>
-        @Model.CurrentMessage
-    </p>
-    <table>
-        @foreach (var item in Model.Customers)
-        {
-            <tr>
-                <td><a href="/home/@nameof(HomeController.Details)/@item.Id">Details</a></td>
-                <td>@Html.ActionLink("View", nameof(HomeController.Details), new { id = item.Id })</td>
-                <td>@item.Id</td>
-                <td>@item.FirstName</td>
-                <td>@item.LastName</td>
-                <td>@item.PhoneNumber</td>
-            </tr>
-        }
-    </table>
-</body>
-</html>
+@{
+    ViewBag.Title = "Customer";
+    Layout = "_Layout";
+}
+<h1>Customers</h1>
+<p>
+    @Model.CurrentMessage
+</p>
+<table>
+    @foreach (var item in Model.Customers)
+    {
+        <tr>
+            <td><a href="/home/@nameof(HomeController.Details)/@item.Id">Details</a></td>
+            <td>@Html.ActionLink("View", nameof(HomeController.Details), new { id = item.Id })</td>
+            <td>@item.Id</td>
+            <td>@item.FirstName</td>
+            <td>@item.LastName</td>
+            <td>@item.PhoneNumber</td>
+        </tr>
+    }
+</table>
+@section footer {
+    &copy; @DateTime.Now.Year SimpleCrm Sample Corp.
+}
