@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SimpleCrm.web.Models;
-using SimpleCrm.Web.Models.Home;
+using SimpleCrm.web.Models.Home;
 using System;
 using System.Linq;
 

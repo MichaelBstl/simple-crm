@@ -10,8 +10,8 @@
     @foreach (var item in Model.Customers)
     {
         <tr>
-            <td><a href="/home/@nameof(HomeController.Details)/@item.Id">Details</a></td>
-            <td>@Html.ActionLink("View", nameof(HomeController.Details), new { id = item.Id })</td>
+            <td><a asp-action="@nameof(HomeController.Details)" asp-route-id="@item.Id">View</a>
+            </td>
             <td>@item.Id</td>
             <td>@item.FirstName</td>
             <td>@item.LastName</td>
@@ -19,6 +19,8 @@
         </tr>
     }
 </table>
+
+<a asp-action="Create" asp-controller="Home">Create</a>
 @section footer {
 
 }
