@@ -73,7 +73,6 @@ namespace SimpleCrm.web.Controllers
         {
             var model = new HomePageViewModel
             {
-                CurrentMessage = _greeter.GetGreeting(),
                 Customers = _customerData.GetAll()
             };
             return View(model);

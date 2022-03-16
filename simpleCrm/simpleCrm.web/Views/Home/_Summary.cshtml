@@ -1,11 +1,13 @@
 ﻿@model Customer
 <div>
-    <span>@Model.Id</span>
-    <span>@Model.FirstName</span>
-    <span>@Model.LastName</span>
-    <span>@Model.PhoneNumber</span>
-    <span>
-        <a asp-action="@nameof(HomeController.Details)" asp-route-id="@Model.Id">View</a>
-        <a asp-action="@nameof(HomeController.Edit)" asp-route-id="@Model.Id">Edit</a>
-    </span>
+    <h3>
+        @Model.FirstName @Model.LastName
+</h3>
+<div>@Model.PhoneNumber</div>
+<div>@Model.Type</div>
+<br />
+<div>
+    <a asp-action="@nameof(HomeController.Details)" asp-route-id="@Model.Id">View</a>
+    <a asp-action="@nameof(HomeController.Edit)" asp-route-id="@Model.Id">Edit</a>
+</div>
 </div>
