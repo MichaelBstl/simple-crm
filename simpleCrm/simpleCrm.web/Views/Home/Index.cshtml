@@ -6,21 +6,10 @@
 <p>
     @Model.CurrentMessage
 </p>
-<table>
-    @foreach (var item in Model.Customers)
-    {
-    <tr>
-        <td>@item.Id</td>
-        <td>@item.FirstName</td>
-        <td>@item.LastName</td>
-        <td>@item.PhoneNumber</td>
-        <td>
-            <a asp-action="@nameof(HomeController.Details)" asp-route-id="@item.Id">View</a>
-            <a asp-action="@nameof(HomeController.Edit)" asp-route-id="@item.Id">Edit</a>
-        </td>
-    </tr>
-    }
-</table>
+@foreach (var customer in Model.Customers)
+{
+    <partial name="_Summary" model="customer" />
+}
 
 <a asp-action="Create">Create</a>
 @section footer {
