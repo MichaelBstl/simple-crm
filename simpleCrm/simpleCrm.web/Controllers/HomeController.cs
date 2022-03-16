@@ -9,12 +9,10 @@ namespace SimpleCrm.web.Controllers
     public class HomeController : Controller
     { 
         private ICustomerData _customerData;
-        private readonly IGreeter _greeter;
         public HomeController(ICustomerData customerData,
             IGreeter greeter)
         {
             _customerData = customerData;
-            _greeter = greeter;
         }
 
         public IActionResult Details(int id)
