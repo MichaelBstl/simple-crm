@@ -5,7 +5,7 @@
     <title>@ViewBag.Title</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="/css/vendor.min.css">
-    <link rel="stylesheet" href="/js/vendor.min.js">
+    <script defer src="/js/vendor.min.js"></script>
 </head>
 <body>
     <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
@@ -24,7 +24,7 @@
             </div>
         </header>
         <div class="mdl-layout__drawer">
-            <span class="mdl-layout-title">Simple CRM</span>
+            <span class="mdl-layout-title">Simple CRM Drawer</span>
             <nav class="mdl-navigation">
                 <a class="mdl-navigation__link" href="/">Customers</a>
                 <a class="mdl-navigation__link" asp-action="Create" asp-controller="Home">Create</a>
