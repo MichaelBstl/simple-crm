@@ -21,6 +21,38 @@ namespace SimpleCrm.web.Controllers
         {
             return View();
         }
+
+        [HttpGet]
+        public IActionResult Login(string returnUrl)
+        {
+            return View();
+        }
+
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<IActionResult> Login(LoginUserViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var loginResult = await _signInManager.PasswordSignInAsync(
+                  model.UserName, model.Password, model.RememberMe, false);
+                if (loginResult.Succeeded)
+                {
+                    if (Url.IsLocalUrl(model.ReturnUrl))
+                    {
+                        return Redirect(model.ReturnUrl);
+                    }
+                    else
+                    {
+                        return RedirectToAction("Index", "Home");
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Could not login");
+                }
+            }
+            return View();
+        }
         [HttpPost, ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterUserViewModel model)
         {
@@ -39,11 +71,18 @@ namespace SimpleCrm.web.Controllers
                     await this._signInManager.SignInAsync(user, isPersistent: false);
                     return RedirectToAction("Index", "Home");
                 }
-  foreach (var result in createResult.Errors)
-  {
-      ModelState.AddModelError("", result.Description);
-  }            }
+                foreach (var result in createResult.Errors)
+                {
+                    ModelState.AddModelError("", result.Description);
+                }
+            }
             return View();
+        }
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+            return RedirectToAction("Index", "Home");
         }
     }
 }

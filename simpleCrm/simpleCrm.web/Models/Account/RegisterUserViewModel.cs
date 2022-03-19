@@ -13,6 +13,5 @@ namespace SimpleCrm.web.Models.Account
         public string Password { get; set; }
         [Required, MinLength(6), Compare("Password", ErrorMessage = "The Passwords do not match"), DataType(DataType.Password)]
         public string ConfirmPassword { get; set; }
-
     }
 }
