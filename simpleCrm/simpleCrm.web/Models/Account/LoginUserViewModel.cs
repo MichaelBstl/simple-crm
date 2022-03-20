@@ -5,9 +5,9 @@ namespace SimpleCrm.web.Models.Account
 {
     public class LoginUserViewModel
     {
-        [Required, MaxLength(256)] 
+        [Required, MaxLength(256), DisplayName("Email Address")] 
         public string UserName { get; set; }
-        [Required, MaxLength(256), DisplayName("Name")]
+        [Required, MaxLength(256), DisplayName("Password"), DataType(DataType.Password)]
         public string Password { get; set; }
         public string ReturnUrl { get; set; }
         public bool RememberMe { get; set; }
