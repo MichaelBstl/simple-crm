@@ -4,9 +4,22 @@
     <meta name="viewport" content="width=device-width" />
     <title>@ViewBag.Title</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link rel="stylesheet" href="/css/vendor.min.css">
+    <environment include="Development">
+        <link rel="stylesheet" href="/css/vendor.min.css">
+        <script src="/js/vendor.min.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css"
+              asp-fallback-href="/css/vendor.min.css"
+              asp-fallback-test-class="mdl-layout__header-row"
+              asp-fallback-test-property="display"
+              asp-fallback-test-value="flex">
+        <script defer src="https://code.getmdl.io/1.3.0/material.min.js"
+                asp-fallback-src="/js/vendor.min.js"
+                asp-fallback-test="window.MaterialButton"></script>
+    </environment>
     <link rel="stylesheet" href="/css/site.css">
-    <script defer src="/js/vendor.min.js"></script>
+    <environment></environment>
 </head>
 <body>
     <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
