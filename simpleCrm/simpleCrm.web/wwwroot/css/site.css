@@ -11,3 +11,6 @@
 .mdl-textfield__error.field-validation-error {
     visibility: visible;
 }
+#myErrorStyling ul li {
+    list-style-type: none;
+}
