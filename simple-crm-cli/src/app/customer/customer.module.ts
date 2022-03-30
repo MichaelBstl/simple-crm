@@ -5,9 +5,7 @@ import { CustomerRoutingModule } from './customer-routing.module';
 import { CustomerListPageComponent } from './customer-list-page/customer-list-page.component';
 
 @NgModule({
-  declarations: [
-    CustomerListPageComponent
-  ],
+  declarations: [CustomerListPageComponent],
   imports: [
     CommonModule,
     CustomerRoutingModule
