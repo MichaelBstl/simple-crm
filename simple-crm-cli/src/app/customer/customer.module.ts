@@ -7,15 +7,17 @@ import { CustomerListPageComponent } from './customer-list-page/customer-list-pa
 import { MatCardModule } from '@angular/material/card';
 import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [CustomerListPageComponent],
   imports: [
     CommonModule,
-    CustomerRoutingModule,
-    MatCardModule,
+    HttpClientModule,
     MatTableModule,
-    MatSortModule
+    MatCardModule,
+    MatSortModule,
+    CustomerRoutingModule
   ]
 })
 export class CustomerModule { }
