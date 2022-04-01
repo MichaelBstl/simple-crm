@@ -8,6 +8,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
 import { HttpClientModule } from '@angular/common/http';
+import { CustomerService } from './customer.service';
 
 @NgModule({
   declarations: [CustomerListPageComponent],
@@ -18,6 +19,9 @@ import { HttpClientModule } from '@angular/common/http';
     MatCardModule,
     MatSortModule,
     CustomerRoutingModule
+  ],
+  providers: [
+    CustomerService
   ]
 })
 export class CustomerModule { }
