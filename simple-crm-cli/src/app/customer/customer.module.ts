@@ -14,9 +14,11 @@ import { environment } from 'src/environments/environment';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatIcon, MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { CustomerCreateDialogComponent } from './customer-create-dialog/customer-create-dialog.component';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
-  declarations: [CustomerListPageComponent],
+  declarations: [CustomerListPageComponent, CustomerCreateDialogComponent],
   imports: [
     CommonModule,
     HttpClientModule,
@@ -26,7 +28,8 @@ import { MatButtonModule } from '@angular/material/button';
     CustomerRoutingModule,
     FlexLayoutModule,
     MatIconModule,
-    MatButtonModule
+    MatButtonModule,
+    MatDialogModule
   ],
   providers: [
     {

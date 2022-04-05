@@ -4,6 +4,9 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { CustomerService } from '../customer.service';
 import { Observable } from 'rxjs';
+import { CustomerCreateDialogComponent } from '../customer-create-dialog/customer-create-dialog.component';
+import { Router } from '@angular/router';
+import {MatDialog} from '@angular/material/dialog';
 
 
 @Component({
@@ -13,7 +16,11 @@ import { Observable } from 'rxjs';
 })
 export class CustomerListPageComponent implements OnInit {
 
-  constructor(private customerService: CustomerService) { }
+  constructor(
+    private customerService: CustomerService,
+    private router: Router,
+    public dialog: MatDialog
+    ) { }
 
   customers$!: Observable<Customer[]>;
 
@@ -23,5 +30,12 @@ export class CustomerListPageComponent implements OnInit {
 
   ngOnInit(): void {
     this.customers$ = this.customerService.search("SearchString");
+  }
+
+  addCustomer(): void {
+    const dialogRef = this.dialog.open(CustomerCreateDialogComponent, {
+      width: '250px',
+      data: null
+    });
   }
 }
