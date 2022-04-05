@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-
+import { Component, Inject, OnInit } from '@angular/core';
+import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import { Customer } from '../customer.model';
 @Component({
   selector: 'crm-customer-create-dialog',
   templateUrl: './customer-create-dialog.component.html',
@@ -7,9 +8,20 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CustomerCreateDialogComponent implements OnInit {
 
-  constructor() { }
+  constructor(public dialogRef: MatDialogRef<CustomerCreateDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: Customer | null
+  ) { }
 
   ngOnInit(): void {
+  }
+
+  save(): void {
+    const customer = {};
+    this.dialogRef.close(customer);
+  }
+
+  cancel(): void {
+    this.dialogRef.close();
   }
 
 }
