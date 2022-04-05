@@ -11,6 +11,9 @@ import { HttpClientModule } from '@angular/common/http';
 import { CustomerService } from './customer.service';
 import { CustomerMockService } from './customer-mock.service';
 import { environment } from 'src/environments/environment';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { MatIcon, MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 
 @NgModule({
   declarations: [CustomerListPageComponent],
@@ -20,7 +23,10 @@ import { environment } from 'src/environments/environment';
     MatTableModule,
     MatCardModule,
     MatSortModule,
-    CustomerRoutingModule
+    CustomerRoutingModule,
+    FlexLayoutModule,
+    MatIconModule,
+    MatButtonModule
   ],
   providers: [
     {

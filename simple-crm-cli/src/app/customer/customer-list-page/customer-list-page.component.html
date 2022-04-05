@@ -1,4 +1,11 @@
 <mat-card>
+  <mat-card-title fxLayout>
+    <span>Customers</span>
+    <span fxFlex> </span>
+    <button class="addButton" mat-mini-fab color="primary">
+      <mat-icon aria-label="Add Customer">add</mat-icon>
+    </button>
+  </mat-card-title>
   <table mat-table [dataSource]="customers$" matSort>
     <ng-container matColumnDef="name">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
