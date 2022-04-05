@@ -1,7 +1,26 @@
 <mat-dialog-content>
-  <p>
-    customer-create-dialog-works
-  </p>
+    <form [formGroup]="detailForm" novalidate>
+      <mat-form-field>
+        <mat-label>First Name</mat-label>
+        <input matInput  formControlName="firstName" name="firstName">
+        <mat-error>First name is required</mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Last Name</mat-label>
+        <input matInput formControlName="lastName" name="lastName" >
+        <mat-error>Last name is required</mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Phone Number</mat-label>
+        <input matInput placeholder="xxx-xxx-xxxx" formControlName="phoneNumber" name="phoneNumber">
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Email Address</mat-label>
+        <input matInput #emailAddress formControlName="emailAddress" name="emailAddress">
+        <mat-error *ngIf="!emailAddress.value">Email address is required</mat-error>
+        <mat-error *ngIf="emailAddress.value">Invalid email address</mat-error>
+      </mat-form-field>
+    </form>
 </mat-dialog-content>
 <mat-dialog-actions>
   <button mat-button (click)="cancel()">Cancel</button>

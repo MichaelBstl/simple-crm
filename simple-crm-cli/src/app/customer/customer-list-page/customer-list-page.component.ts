@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 import { CustomerCreateDialogComponent } from '../customer-create-dialog/customer-create-dialog.component';
 import { Router } from '@angular/router';
 import {MatDialog} from '@angular/material/dialog';
-
+import { MatInputModule} from '@angular/material/input';
 
 @Component({
   selector: 'crm-customer-list-page',

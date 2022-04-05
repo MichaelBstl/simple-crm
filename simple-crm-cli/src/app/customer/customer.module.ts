@@ -16,7 +16,8 @@ import { MatIcon, MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { CustomerCreateDialogComponent } from './customer-create-dialog/customer-create-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
-
+import { MatInput, MatInputModule } from '@angular/material/input';
+import { ReactiveFormsModule } from '@angular/forms';
 @NgModule({
   declarations: [CustomerListPageComponent, CustomerCreateDialogComponent],
   imports: [
@@ -29,7 +30,9 @@ import { MatDialogModule } from '@angular/material/dialog';
     FlexLayoutModule,
     MatIconModule,
     MatButtonModule,
-    MatDialogModule
+    MatDialogModule,
+    MatInputModule,
+    ReactiveFormsModule
   ],
   providers: [
     {
