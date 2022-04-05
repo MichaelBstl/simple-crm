@@ -20,7 +20,13 @@
         <mat-error *ngIf="!emailAddress.value">Email address is required</mat-error>
         <mat-error *ngIf="emailAddress.value">Invalid email address</mat-error>
       </mat-form-field>
-    </form>
+      <mat-form-field>
+        <mat-label>PreferedContact Methold</mat-label>
+        <mat-select formControlName="preferredContactMethod" name="preferredContactMethod">
+          <mat-option value="Email">Email</mat-option>
+          <mat-option value="Phone">Phone</mat-option>
+        </mat-select>
+      </mat-form-field>    </form>
 </mat-dialog-content>
 <mat-dialog-actions>
   <button mat-button (click)="cancel()">Cancel</button>

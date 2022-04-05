@@ -3,7 +3,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { Customer } from '../customer.model';
 import { MatInputModule} from '@angular/material/input';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 @Component({
   selector: 'crm-customer-create-dialog',
   templateUrl: './customer-create-dialog.component.html',
@@ -22,7 +22,7 @@ export class CustomerCreateDialogComponent implements OnInit {
       lastName: ['', Validators.required],
       phoneNumber: [''],
       emailAddress: ['', [Validators.required, Validators.email]],
-      preferredContactMethod: ['email']
+      preferredContactMethod: ['Email']
     });
     if (this.data) {
       this.detailForm.patchValue(this.data);
