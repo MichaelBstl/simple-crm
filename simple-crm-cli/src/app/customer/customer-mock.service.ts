@@ -19,7 +19,19 @@ export class CustomerMockService extends CustomerService {
     if (localCustomers) {
       this.customers = JSON.parse(localCustomers);
     } else {
-      this.customers = [];
+      this.customers = [
+        {
+          customerId: 1,
+          firstName: 'John',
+          lastName: 'Smith',
+          phoneNumber: '314-555-1234',
+          preferredContactMethod: 'email',
+          emailAddress: 'xya@123.com',
+          statusCode: '',
+          lastContactDate: '01/-01/2020'
+        }
+      ];
+      localStorage.setItem('customers', JSON.stringify(this.customers));
     }
     this .lastCustomerId = Math.max(...this.customers.map(x => x.customerId));
   }

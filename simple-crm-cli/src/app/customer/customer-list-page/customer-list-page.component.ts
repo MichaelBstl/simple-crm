@@ -8,7 +8,6 @@ import { CustomerCreateDialogComponent } from '../customer-create-dialog/custome
 import { Router } from '@angular/router';
 import {MatDialog} from '@angular/material/dialog';
 import { MatInputModule} from '@angular/material/input';
-
 @Component({
   selector: 'crm-customer-list-page',
   templateUrl: './customer-list-page.component.html',
@@ -25,7 +24,7 @@ export class CustomerListPageComponent implements OnInit {
   customers$!: Observable<Customer[]>;
 
   @ViewChild(MatSort, { static: true }) sort!: MatSort;
-  displayColumns = ['name', 'phoneNumber', 'emailAddress', 'statusCode'];
+  displayColumns = ['name', 'phoneNumber', 'emailAddress', 'statusCode', 'action'];
 
 
   ngOnInit(): void {
@@ -37,5 +36,8 @@ export class CustomerListPageComponent implements OnInit {
       width: '250px',
       data: null
     });
+  }
+  goToDetails(): void {
+    return;
   }
 }
