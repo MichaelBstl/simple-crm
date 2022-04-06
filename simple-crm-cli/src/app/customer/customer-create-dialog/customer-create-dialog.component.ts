@@ -36,13 +36,12 @@ export class CustomerCreateDialogComponent implements OnInit {
     if (!this.detailForm.valid) {
       return;
     }
-    const customer = {};
+    const customer = { ...this.data, ...this.detailForm.value };
     this.dialogRef.close(customer);
   }
 
   cancel(): void {
-    const customer = { ...this.data, ...this.detailForm.value };
-    this.dialogRef.close(customer);
+    this.dialogRef.close();
   }
 
 }
