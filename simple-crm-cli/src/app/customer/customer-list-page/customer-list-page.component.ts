@@ -37,7 +37,7 @@ export class CustomerListPageComponent implements OnInit {
       data: null
     });
   }
-  goToDetails(): void {
-    return;
+  goToDetails(customer: Customer): void {
+    this.router.navigate([`./customer/${customer.customerId}`]);
   }
 }
