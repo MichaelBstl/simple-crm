@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Customer } from '../customer.model';
 import { CustomerService } from '../customer.service';
-import { Observable, of } from 'rxjs';
+import { Router } from '@angular/router';
+
 @Component({
   selector: 'crm-customer-detail',
   templateUrl: './customer-detail.component.html',
@@ -11,11 +12,27 @@ import { Observable, of } from 'rxjs';
 })
 export class CustomerDetailComponent implements OnInit {
   customerId!: number;
-  customer$!: Customer;
+  customer!: Customer;
+  detailForm!: FormGroup;
   constructor(
+    private fb: FormBuilder,
     private route: ActivatedRoute,
-    private customerService: CustomerService) {
+    private router: Router,
+    private customerService: CustomerService
+  ) {
+      this.createForm();
    }
+
+  createForm(): void {
+     this.detailForm = this.fb.group({
+       firstName: ['', Validators.required],
+       lastName: ['', Validators.required],
+       phoneNumber: [''],
+       emailAddress: ['', [Validators.required, Validators.email]],
+       preferredContactMethod: ['email']
+     });
+  }
+
 
   ngOnInit(): void {
     this.customerId = +this.route.snapshot.params['id'];
@@ -24,7 +41,22 @@ export class CustomerDetailComponent implements OnInit {
     .get(this.customerId)
     .subscribe(cust => {  // like listening to a JavaScript fetch call to return
        if (cust) {
-         this.customer$ = cust;
-       }
-    });  }
-}
+         this.customer = cust;
+         if (this.customer) {
+          this.detailForm.patchValue(this.customer);
+        }
+           }
+      });
+  }
+  save(): void {
+    if (!this.detailForm.valid) {
+      return;
+    }
+    const customer = { ...this.customer, ...this.detailForm.value };
+    this.customerService.update(customer);
+    this.router.navigate([`./customers`]);
+  }
+
+  cancel(): void {
+    this.router.navigate([`./customers`]);
+  }}

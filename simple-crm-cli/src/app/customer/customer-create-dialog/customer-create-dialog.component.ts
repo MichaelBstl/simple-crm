@@ -3,6 +3,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { Customer } from '../customer.model';
 import { MatInputModule} from '@angular/material/input';
+import { CustomerService } from '../customer.service';
 
 @Component({
   selector: 'crm-customer-create-dialog',
@@ -13,6 +14,7 @@ export class CustomerCreateDialogComponent implements OnInit {
   detailForm: FormGroup;
 
   constructor(
+    private customerService: CustomerService,
     private fb: FormBuilder,
     public dialogRef: MatDialogRef<CustomerCreateDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: Customer | null
@@ -37,6 +39,7 @@ export class CustomerCreateDialogComponent implements OnInit {
       return;
     }
     const customer = { ...this.data, ...this.detailForm.value };
+    this.customerService.insert(customer)
     this.dialogRef.close(customer);
   }
 
