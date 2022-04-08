@@ -24,7 +24,7 @@ export class CustomerListPageComponent implements OnInit {
   customers$!: Observable<Customer[]>;
 
   @ViewChild(MatSort, { static: true }) sort!: MatSort;
-  displayColumns = ['name', 'phoneNumber', 'emailAddress', 'statusCode', 'action'];
+  displayColumns = ['name', 'phoneNumber', 'emailAddress', 'statusCode', 'action', 'lastContactDate'];
 
 
   ngOnInit(): void {

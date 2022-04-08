@@ -28,7 +28,7 @@ export class CustomerMockService extends CustomerService {
           preferredContactMethod: 'email',
           emailAddress: 'xya@123.com',
           statusCode: '',
-          lastContactDate: '01/-01/2020'
+          lastContactDate: '01/01/2020'
         }
       ];
       localStorage.setItem('customers', JSON.stringify(this.customers));
