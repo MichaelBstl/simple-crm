@@ -21,7 +21,9 @@
     </ng-container>
     <ng-container matColumnDef="statusCode">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Status Code </th>
-      <td mat-cell *matCellDef="let row"> {{row.statusCode}}</td>
+      <td mat-cell *matCellDef="let row">
+        <mat-icon [svgIcon]="row.statusCode  | statusIcon"></mat-icon>
+         {{row.statusCode}}</td>
     </ng-container>
     <ng-container matColumnDef="lastContactDate">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Last Contact Date </th>
@@ -37,3 +39,6 @@
     <tr mat-row *matRowDef="let row; columns: displayColumns;"></tr>
   </table>
 </mat-card>
+<pre>
+  {{customers$ | async | json}}
+</pre>

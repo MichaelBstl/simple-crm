@@ -7,11 +7,12 @@ import { AppComponent } from './app.component';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { MatIconModule } from '@angular/material/icon'
+import { MatIconModule, MatIconRegistry } from '@angular/material/icon'
 import { MatSidenavModule} from '@angular/material/sidenav'
 import { MatListModule } from '@angular/material/list'
 import { CustomerModule } from './customer/customer.module';
 import { MatButtonModule } from '@angular/material/button';
+import { AppIconsService } from './customer/app-icons.service';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,10 @@ import { MatButtonModule } from '@angular/material/button';
     CustomerModule,
     MatButtonModule
   ],
-  providers: [],
+  providers: [AppIconsService],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+    // simply passing in the icon service, instantiates it and registers its icons
+    constructor(iconService: AppIconsService) {}  // <-- NEW
+ }

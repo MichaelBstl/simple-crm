@@ -27,8 +27,28 @@ export class CustomerMockService extends CustomerService {
           phoneNumber: '314-555-1234',
           preferredContactMethod: 'email',
           emailAddress: 'xya@123.com',
-          statusCode: '',
+          statusCode: 'Runner',
           lastContactDate: '01/01/2020'
+        },
+        {
+          customerId: 1,
+          firstName: 'John',
+          lastName: 'Smith',
+          phoneNumber: '314-555-1234',
+          preferredContactMethod: 'email',
+          emailAddress: 'xya@123.com',
+          statusCode: 'Cyclist',
+          lastContactDate: '02/01/2020'
+        },
+        {
+          customerId: 1,
+          firstName: 'John',
+          lastName: 'Smith',
+          phoneNumber: '314-555-1234',
+          preferredContactMethod: 'email',
+          emailAddress: 'xya@123.com',
+          statusCode: '',
+          lastContactDate: '02/01/2020'
         }
       ];
       localStorage.setItem('customers', JSON.stringify(this.customers));
