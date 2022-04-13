@@ -63,6 +63,7 @@ namespace SimpleCrm.web.Controllers
                     Type = model.Type
                 };
                 _customerData.Add(customer);
+                _customerData.Commit();
 
                 return RedirectToAction(nameof(Details), new { Id = customer.Id });
             }
@@ -92,7 +93,8 @@ namespace SimpleCrm.web.Controllers
                 customerData.PhoneNumber = model.PhoneNumber;
                 customerData.OptInNewsletter = model.OptInNewsletter;
                 customerData.Type = model.Type;
-                _customerData.Update();
+                _customerData.Update(customerData);
+                _customerData.Commit();
                 return RedirectToAction(nameof(Details), new { id = customerData.Id });
             }
 

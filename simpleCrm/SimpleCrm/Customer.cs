@@ -20,5 +20,10 @@ namespace SimpleCrm
         public bool OptInNewsletter { get; set; }
         [Display(Name = "Customer Type")]
         public CustomerType Type { get; set; }
+        [MaxLength(50)]
+        public string EmailAddress { get; set; }
+        public InteractionMethod ContactMethod { get; set; }
+        public CustomerStatus Status { get; set; }
+        public DateTime LastContactDate { get; set; }
     }
 }
