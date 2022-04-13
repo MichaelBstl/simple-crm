@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace SimpleCrm.web.Models
 {
@@ -13,5 +14,11 @@ namespace SimpleCrm.web.Models
         [Display(Name = "Phone Number")]
         [DataType(DataType.PhoneNumber)]
         public string PhoneNumber { get; set; }
+
+        public string EmailAddress { get; set; }
+        public string PreferredContactMethod { get; set; }
+        public string Status { get; set; }
+        public DateTime LastContactDate { get; set; }
+
     }
 }
