@@ -11,12 +11,12 @@ namespace SimpleCrm
         {
             _customers = new List<Customer>
                   {
-                      new Customer { Id =1, FirstName ="Bob", LastName = "Jones", PhoneNumber = "555-555-2345" },
-                      new Customer { Id =2, FirstName ="Jane", LastName = "Smith", PhoneNumber = "555-555-5256" },
-                      new Customer { Id =3, FirstName ="Mike", LastName = "Doe", PhoneNumber = "555-555-8547" },
-                      new Customer { Id =4, FirstName ="Karen", LastName = "Jamieson", PhoneNumber = "555-555-9134" },
-                      new Customer { Id =5, FirstName ="James", LastName = "Dean", PhoneNumber = "555-555-7245" },
-                      new Customer { Id =6, FirstName ="Michelle", LastName = "Leary", PhoneNumber = "555-555-3457" }
+                      new Customer { Id =1, FirstName ="Bob", LastName = "Jones", PhoneNumber = "555-555-2345", Status = CustomerStatus.Initial },
+                      new Customer { Id =2, FirstName ="Jane", LastName = "Smith", PhoneNumber = "555-555-5256", Status = CustomerStatus.Partner },
+                      new Customer { Id =3, FirstName ="Mike", LastName = "Doe", PhoneNumber = "555-555-8547", Status = CustomerStatus.Prospect },
+                      new Customer { Id =4, FirstName ="Karen", LastName = "Jamieson", PhoneNumber = "555-555-9134", Status = CustomerStatus.Initial },
+                      new Customer { Id =5, FirstName ="James", LastName = "Dean", PhoneNumber = "555-555-7245", Status = CustomerStatus.Prospect },
+                      new Customer { Id =6, FirstName ="Michelle", LastName = "Leary", PhoneNumber = "555-555-3457", Status = CustomerStatus.Partner }
                   };
         }
 
@@ -43,6 +43,18 @@ namespace SimpleCrm
         public void Commit ()
         {
 
+        }
+        public List<Customer> GetByStatus(CustomerStatus status, int pageIndex, int take, string orderBy)
+        {
+            List<Customer> customers = ((List<Customer>)(from cust in _customers where cust.Status == status select cust));
+            return customers;
+        }
+
+        public void Delete(int customerId)
+        {
+            int index = _customers.IndexOf((from cust in _customers where cust.Id == customerId select cust).FirstOrDefault());
+            _customers.RemoveAt(index);
+            return;
         }
     }
 }
