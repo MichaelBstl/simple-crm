@@ -19,7 +19,9 @@ namespace SimpleCrm.WebApi.ApiControllers
         [HttpGet("")] //  ./api/customers
         public IActionResult GetAll()
         {
-            throw new NotImplementedException();
+            var customers = _customerData.GetAll(0, 50, "");
+            return Ok(customers); //200
+
         }
         /// <summary>
         /// Retrieves a single customer by id
@@ -29,22 +31,67 @@ namespace SimpleCrm.WebApi.ApiControllers
         [HttpGet("{id}")] //  ./api/customers/:id
         public IActionResult Get(int id)
         {
-            throw new NotImplementedException();
+            var customer = _customerData.Get(id);
+            if (customer == null)
+            {
+                return NotFound(); // 404
+            }
+            return Ok(customer); // 200
         }
         [HttpPost("")] //  ./api/customers
         public IActionResult Create([FromBody] Customer model)
         {
-            throw new NotImplementedException();
+            if (model == null)
+            {
+                return BadRequest();
+            }
+            _customerData.Add(model);
+            _customerData.Commit();
+            return Created("Id", model); // 201  ToDo: generate a link
         }
         [HttpPut("{id}")] //  ./api/customers/:id
         public IActionResult Update(int id, [FromBody] Customer model)
         {
-            throw new NotImplementedException();
+            if (model == null)
+            {
+                return BadRequest();
+            }
+/*
+            if (!ModelState.IsValid)
+            {
+                return new ValidationFailedResult(ModelState); // ValidationFailedResult is causing an error
+            }
+*/
+            var customer = _customerData.Get(id);
+            if (customer == null)
+            {
+                return NotFound(); // 404
+            }
+            customer.FirstName = model.FirstName;
+            customer.LastName = model.LastName;
+            customer.PhoneNumber = model.PhoneNumber;
+            customer.OptInNewsletter = model.OptInNewsletter;
+            customer.Type = model.Type;
+            customer.EmailAddress = model.EmailAddress;
+            customer.ContactMethod = model.ContactMethod;
+            customer.Status = model.Status;
+            customer.LastContactDate = model.LastContactDate;
+            // can I just use model that was passed into this method instead of updating all of the fields in the customer object that was fetched?
+            _customerData.Update(customer);
+            _customerData.Commit();
+            return NoContent();  // 204
         }
         [HttpDelete("{id}")] //  ./api/customers/:id
-        public IActionResult Delete(int id)
+        public IActionResult Delete(Customer customer)
         {
-            throw new NotImplementedException();
+            var tempCustomer = _customerData.Get(customer.Id);
+            if (tempCustomer == null)
+            {
+                return NotFound(); // 404
+            }
+            _customerData.Delete(customer);
+            _customerData.Commit();
+            return NoContent(); // 204
         }
     }
 }

@@ -44,15 +44,15 @@ namespace SimpleCrm
         {
 
         }
-        public List<Customer> GetByStatus(CustomerStatus status, int pageIndex, int take, string orderBy)
+        public List<Customer> GetAll(int pageIndex, int take, string orderBy)
         {
-            List<Customer> customers = ((List<Customer>)(from cust in _customers where cust.Status == status select cust));
+            List<Customer> customers = ((List<Customer>)(from cust in _customers select cust));
             return customers;
         }
 
-        public void Delete(int customerId)
+        public void Delete(Customer customer)
         {
-            int index = _customers.IndexOf((from cust in _customers where cust.Id == customerId select cust).FirstOrDefault());
+            int index = _customers.IndexOf((from cust in _customers where cust.Id == customer.Id select cust).FirstOrDefault());
             _customers.RemoveAt(index);
             return;
         }

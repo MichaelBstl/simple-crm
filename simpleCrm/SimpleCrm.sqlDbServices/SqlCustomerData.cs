@@ -36,7 +36,7 @@ namespace SimpleCrm.SqlDbServices
             dbContext.SaveChanges();
         }
 
-        public List<Customer> GetByStatus(CustomerStatus status, int pageIndex, int take, string orderBy)
+        public List<Customer> GetAll(int pageIndex, int take, string orderBy)
         {
             //valid columns to sort by
             var validColumns = new string[] { "Id", "FirstName", "LastName", "PhoneNumber", "OptInNewsletter", "Type", "EmailAddress", "ContactMethod", "Status", "LastContactDate" }.ToList();
@@ -48,7 +48,7 @@ namespace SimpleCrm.SqlDbServices
             var splitOrderBy = orderBy.Split(',');
             // examine each sort parameter & make sure it has the proper number of parameters & the parameters are 
             //   valid columns & sort direction
-            foreach(string order in splitOrderBy)
+            foreach (string order in splitOrderBy)
             {
                 var component = order.Split(" ");
                 if (component.Length == 1 || component.Length == 2)
@@ -64,7 +64,7 @@ namespace SimpleCrm.SqlDbServices
                 }
 
 
-                if (!(component[1].ToLower().Contains("asc") || 
+                if (!(component[1].ToLower().Contains("asc") ||
                      component[1].ToLower().Contains("desc") ||
                      string.IsNullOrWhiteSpace(component[1])
                      ))
@@ -74,13 +74,12 @@ namespace SimpleCrm.SqlDbServices
             }
 
 
-            return dbContext.Customers.Where(x => x.Status == status)
+            return dbContext.Customers
                 .OrderBy(orderBy)
                 .Skip(pageIndex * take)
                 .Take(take).ToList();
-            
-        }
 
+        }
         public void Delete(Customer customer)
         {
             dbContext.Remove(customer);
