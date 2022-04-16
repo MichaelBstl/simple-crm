@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SimpleCrm.WebApi.Models;
 using System;
+using System.Globalization;
+using System.Linq;
 
 namespace SimpleCrm.WebApi.ApiControllers
 {
@@ -20,7 +23,8 @@ namespace SimpleCrm.WebApi.ApiControllers
         public IActionResult GetAll()
         {
             var customers = _customerData.GetAll(0, 50, "");
-            return Ok(customers); //200
+            var models = customers.Select(c => new CustomerDisplayViewModel(c));
+            return Ok(models); //200
 
         }
         /// <summary>
@@ -36,7 +40,9 @@ namespace SimpleCrm.WebApi.ApiControllers
             {
                 return NotFound(); // 404
             }
-            return Ok(customer); // 200
+            var models = new CustomerDisplayViewModel(customer);
+
+            return Ok(models); // 200
         }
         [HttpPost("")] //  ./api/customers
         public IActionResult Create([FromBody] Customer model)
@@ -45,6 +51,12 @@ namespace SimpleCrm.WebApi.ApiControllers
             {
                 return BadRequest();
             }
+/*            
+            if (!ModelState.IsValid)
+            {
+                return new ValidationFailedResult(ModelState); // ValidationFailedResult is causing an error
+            }
+*/            
             _customerData.Add(model);
             _customerData.Commit();
             return Created("Id", model); // 201  ToDo: generate a link
@@ -56,12 +68,6 @@ namespace SimpleCrm.WebApi.ApiControllers
             {
                 return BadRequest();
             }
-/*
-            if (!ModelState.IsValid)
-            {
-                return new ValidationFailedResult(ModelState); // ValidationFailedResult is causing an error
-            }
-*/
             var customer = _customerData.Get(id);
             if (customer == null)
             {
