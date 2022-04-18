@@ -45,24 +45,35 @@ namespace SimpleCrm.WebApi.ApiControllers
             return Ok(models); // 200
         }
         [HttpPost("")] //  ./api/customers
-        public IActionResult Create([FromBody] Customer model)
+        public IActionResult Create([FromBody] CustomerUpdateViewModel model)
         {
             if (model == null)
             {
                 return BadRequest();
             }
-/*            
-            if (!ModelState.IsValid)
+            /*            
+                        if (!ModelState.IsValid)
+                        {
+                            return new ValidationFailedResult(ModelState); // ValidationFailedResult is causing an error
+                        }
+            */
+            var customer = new Customer();
+            if (customer == null)
             {
-                return new ValidationFailedResult(ModelState); // ValidationFailedResult is causing an error
+                return NotFound(); // 404
             }
-*/            
-            _customerData.Add(model);
+            customer.FirstName = model.FirstName;
+            customer.LastName = model.LastName;
+            customer.PhoneNumber = model.PhoneNumber;
+            customer.EmailAddress = model.EmailAddress;
+            customer.ContactMethod = model.PreferredContactMethod;
+
+            _customerData.Add(customer);
             _customerData.Commit();
             return Created("Id", model); // 201  ToDo: generate a link
         }
         [HttpPut("{id}")] //  ./api/customers/:id
-        public IActionResult Update(int id, [FromBody] Customer model)
+        public IActionResult Update(int id, [FromBody] CustomerUpdateViewModel model)
         {
             if (model == null)
             {
@@ -73,16 +84,16 @@ namespace SimpleCrm.WebApi.ApiControllers
             {
                 return NotFound(); // 404
             }
+
             customer.FirstName = model.FirstName;
             customer.LastName = model.LastName;
             customer.PhoneNumber = model.PhoneNumber;
-            customer.OptInNewsletter = model.OptInNewsletter;
-            customer.Type = model.Type;
             customer.EmailAddress = model.EmailAddress;
-            customer.ContactMethod = model.ContactMethod;
+            customer.ContactMethod = model.PreferredContactMethod;
+            customer.OptInNewsletter = model.OptInNewsletter;
             customer.Status = model.Status;
-            customer.LastContactDate = model.LastContactDate;
-            // can I just use model that was passed into this method instead of updating all of the fields in the customer object that was fetched?
+            customer.Type = model.Type;
+
             _customerData.Update(customer);
             _customerData.Commit();
             return NoContent();  // 204
