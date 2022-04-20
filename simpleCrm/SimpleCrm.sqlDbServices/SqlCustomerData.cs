@@ -39,7 +39,7 @@ namespace SimpleCrm.SqlDbServices
         public List<Customer> GetAll(int pageIndex, int take, string orderBy)
         {
             //valid columns to sort by
-            var validColumns = new string[] { "Id", "FirstName", "LastName", "PhoneNumber", "OptInNewsletter", "Type", "EmailAddress", "ContactMethod", "Status", "LastContactDate" }.ToList();
+            var validColumns = new string[] { "id", "firstname", "lastname", "phonenumber", "optinnewsletter", "type", "emailaddress", "contactmethod", "status", "lastcontactdate" }.ToList();
             // default to last name sort order if orderBy is blank or null
             if (string.IsNullOrWhiteSpace(orderBy))
             {
@@ -64,10 +64,10 @@ namespace SimpleCrm.SqlDbServices
                 }
 
 
-                if (!(component[1].ToLower().Contains("asc") ||
-                     component[1].ToLower().Contains("desc") ||
-                     string.IsNullOrWhiteSpace(component[1])
-                     ))
+                if (!(component.Length < 2 ||
+                      string.IsNullOrWhiteSpace(component[1]) ||
+                      component[1].ToLower().Contains("asc") ||
+                      component[1].ToLower().Contains("desc")))
                 {
                     throw new Exception("Invalid sort parameter. Incorrect sort order:" + component);
                 }

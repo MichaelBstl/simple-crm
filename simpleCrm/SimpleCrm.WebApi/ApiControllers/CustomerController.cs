@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using SimpleCrm.WebApi.Models;
 using System;
 using System.Globalization;
 using System.Linq;
+using static Microsoft.AspNetCore.Mvc.ModelBinding.ModelStateDictionary;
 
 namespace SimpleCrm.WebApi.ApiControllers
 {
@@ -10,6 +12,8 @@ namespace SimpleCrm.WebApi.ApiControllers
     public class CustomerController : Controller
     {
         private readonly ICustomerData _customerData;
+        private string Messages;
+        private KeyEnumerable Errors;
 
         public CustomerController(ICustomerData customerData)
         {
@@ -45,32 +49,30 @@ namespace SimpleCrm.WebApi.ApiControllers
             return Ok(models); // 200
         }
         [HttpPost("")] //  ./api/customers
-        public IActionResult Create([FromBody] CustomerUpdateViewModel model)
+        public IActionResult Create([FromBody] CustomerCreateViewModel model)
         {
             if (model == null)
             {
                 return BadRequest();
             }
-            /*            
-                        if (!ModelState.IsValid)
-                        {
-                            return new ValidationFailedResult(ModelState); // ValidationFailedResult is causing an error
-                        }
-            */
-            var customer = new Customer();
-            if (customer == null)
+
+            if (!ModelState.IsValid)
             {
-                return NotFound(); // 404
+                return new ValidationFailedResult(ModelState);
             }
-            customer.FirstName = model.FirstName;
-            customer.LastName = model.LastName;
-            customer.PhoneNumber = model.PhoneNumber;
-            customer.EmailAddress = model.EmailAddress;
-            customer.ContactMethod = model.PreferredContactMethod;
+
+            var customer = new Customer
+            {
+                FirstName = model.FirstName,
+                LastName = model.LastName,
+                PhoneNumber = model.PhoneNumber,
+                EmailAddress = model.EmailAddress,
+                ContactMethod = model.PreferredContactMethod
+            };
 
             _customerData.Add(customer);
             _customerData.Commit();
-            return Created("Id", model); // 201  ToDo: generate a link
+            return Ok(new CustomerDisplayViewModel(customer)); // 201  ToDo: generate a link
         }
         [HttpPut("{id}")] //  ./api/customers/:id
         public IActionResult Update(int id, [FromBody] CustomerUpdateViewModel model)
@@ -79,6 +81,12 @@ namespace SimpleCrm.WebApi.ApiControllers
             {
                 return BadRequest();
             }
+
+            if (!ModelState.IsValid)
+            {
+                return new ValidationFailedResult(ModelState);
+            }
+
             var customer = _customerData.Get(id);
             if (customer == null)
             {

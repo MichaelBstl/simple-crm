@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <UserSecretsId>aspnet-SimpleCrm.WebApi-FD9F3691-2293-4B52-9C89-6DD8A9E9EE91</UserSecretsId>
   </PropertyGroup>
 
