@@ -6,8 +6,8 @@ namespace SimpleCrm.WebApi.Models
 {
     public class ValidationStateModel
     {
-        public string Messages;
-        public List<ValidationError> Errors;
+        public string Messages { get; set; }
+        public List<ValidationError> Errors { get; set; }
         public ValidationStateModel(ModelStateDictionary modelState)
         {  // modelState has keys for each property that has an associated error
             var genericErrors = modelState.Keys
