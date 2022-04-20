@@ -38,7 +38,9 @@ namespace SimpleCrm
         }
         public void Update(Customer customer)
         {
-//            _customers.Add();
+            int index = _customers.IndexOf((from cust in _customers where cust.Id == customer.Id select cust).FirstOrDefault());
+            _customers[index] = customer;
+            return;
         }
         public void Commit ()
         {
