@@ -46,7 +46,7 @@ namespace SimpleCrm
         {
 
         }
-        public List<Customer> GetAll(int pageIndex, int take, string orderBy)
+        public List<Customer> GetAll(CustomerListParameters listParameters)
         {
             List<Customer> customers = ((List<Customer>)(from cust in _customers select cust));
             return customers;

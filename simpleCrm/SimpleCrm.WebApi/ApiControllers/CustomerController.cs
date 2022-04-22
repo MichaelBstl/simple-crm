@@ -26,28 +26,50 @@ namespace SimpleCrm.WebApi.ApiControllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("", Name = "GetCustomers")] //  ./api/customers
-        public IActionResult GetAll([FromQuery]int page = 1, [FromQuery]int take = 50)
+        public IActionResult GetAll([FromQuery]CustomerListParameters resourceParameters)
         {
-            var customers = _customerData.GetAll(page - 1, take + 1, "");
-            var pagination = new PaginationModel
+            if (resourceParameters.Page == null)
             {
-                Next = take + 1 == customers.Count ? GetCustomerResourceUri(page + 1, take) : null,
-                Previous = page <= 1 ? null : GetCustomerResourceUri(page - 1, take)
-            };
-            customers.RemoveAt(customers.Count - 1);
+                resourceParameters.Page = 1;
+            }
+            if (resourceParameters.Take > 50 ||
+                resourceParameters.Take < 1 ||
+                resourceParameters.Page < 1)
+            {
+                 return BadRequest();
+            }
+            var customers = _customerData.GetAll(resourceParameters);
+            var pagination = new PaginationModel();
+            if (resourceParameters.Take == customers.Count)
+            {
+                pagination.Next = GetCustomerResourceUri(resourceParameters, 1);
+            }
+            pagination.Previous = resourceParameters.Page <= 1 ?
+                null : GetCustomerResourceUri(resourceParameters, -1);
+
             var models = customers.Select(c => new CustomerDisplayViewModel(c));
 
-            var next = GetCustomerResourceUri(page + 1, take);
-            var previous = GetCustomerResourceUri(page - 1, take);
             Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(pagination));
 
             return Ok(models); //200
 
         }
-
-        private string GetCustomerResourceUri(int page, int take)
+        private string GetCustomerResourceUri(CustomerListParameters listParameters, int pageAdjust)
         {
-            return _linkGenerator.GetPathByName(this.HttpContext, "GetCustomers",values: new { page = page, take = take });
+            if (listParameters.Page + pageAdjust <= 0)
+                return null;
+
+
+            return _linkGenerator.GetPathByName(this.HttpContext, "GetCustomers",
+                    values: new { 
+                                    page = listParameters.Page + pageAdjust, 
+                                    take = listParameters.Take,
+                                    orderBy = listParameters.OrderBy,
+                                    LastName = listParameters.LastName,
+                                    Email = listParameters.Email,
+                                    SearchTerm = listParameters.SearchTerm
+
+                    });
         }
         /// <summary>
         /// Retrieves a single customer by id

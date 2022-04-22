@@ -36,48 +36,76 @@ namespace SimpleCrm.SqlDbServices
             dbContext.SaveChanges();
         }
 
-        public List<Customer> GetAll(int pageIndex, int take, string orderBy)
+        public List<Customer> GetAll(CustomerListParameters listParameters)
         {
             //valid columns to sort by
             var validColumns = new string[] { "id", "firstname", "lastname", "phonenumber", "optinnewsletter", "type", "emailaddress", "contactmethod", "status", "lastcontactdate" }.ToList();
             // default to last name sort order if orderBy is blank or null
-            if (string.IsNullOrWhiteSpace(orderBy))
+            if (!string.IsNullOrWhiteSpace(listParameters.OrderBy))
             {
-                orderBy = "LastName";
+                var splitOrderBy = listParameters.OrderBy.Split(',');
+                // examine each sort parameter & make sure it has the proper number of parameters & the parameters are 
+                //   valid columns & sort direction
+                foreach (string order in splitOrderBy)
+                {
+                    var component = order.Split(" ");
+                    if (component.Length == 1 || component.Length == 2)
+                    { //valid as it has one or two arguments
+                    }
+                    else
+                    {
+                        throw new Exception("Invalid sort parameter. Incorrect number of arguments:" + order);
+                    }
+                    if (!validColumns.Contains(component[0].ToLower()))
+                    {
+                        throw new Exception("Invalid sort parameter. Incorrect column specified:" + component);
+                    }
+
+
+                    if (!(component.Length < 2 ||
+                          string.IsNullOrWhiteSpace(component[1]) ||
+                          component[1].ToLower().Contains("asc") ||
+                          component[1].ToLower().Contains("desc")))
+                    {
+                        throw new Exception("Invalid sort parameter. Incorrect sort order:" + component);
+                    }
+                }
             }
-            var splitOrderBy = orderBy.Split(',');
-            // examine each sort parameter & make sure it has the proper number of parameters & the parameters are 
-            //   valid columns & sort direction
-            foreach (string order in splitOrderBy)
+            IQueryable<Customer> sortedResults;
+            if (string.IsNullOrWhiteSpace(listParameters.OrderBy))
             {
-                var component = order.Split(" ");
-                if (component.Length == 1 || component.Length == 2)
-                { //valid as it has one or two arguments
-                }
-                else
-                {
-                    throw new Exception("Invalid sort parameter. Incorrect number of arguments:" + order);
-                }
-                if (!validColumns.Contains(component[0].ToLower()))
-                {
-                    throw new Exception("Invalid sort parameter. Incorrect column specified:" + component);
-                }
-
-
-                if (!(component.Length < 2 ||
-                      string.IsNullOrWhiteSpace(component[1]) ||
-                      component[1].ToLower().Contains("asc") ||
-                      component[1].ToLower().Contains("desc")))
-                {
-                    throw new Exception("Invalid sort parameter. Incorrect sort order:" + component);
-                }
+                sortedResults = dbContext.Customers;
+            }
+            else
+            {
+                sortedResults = dbContext.Customers
+                  .OrderBy(listParameters.OrderBy);
             }
 
+            if (!string.IsNullOrWhiteSpace(listParameters.LastName))
+            {
+                sortedResults = sortedResults
+                    .Where(x => x.LastName.ToLower() == listParameters.LastName.Trim().ToLower());
+            }
 
-            return dbContext.Customers
-                .OrderBy(orderBy)
-                .Skip(pageIndex * take)
-                .Take(take).ToList();
+            if (!string.IsNullOrWhiteSpace(listParameters.Email))
+            {
+                sortedResults = sortedResults
+                    .Where(x => x.EmailAddress.ToLower() == listParameters.Email.Trim().ToLower());
+            }
+
+            if (!string.IsNullOrWhiteSpace(listParameters.SearchTerm))
+            {
+                sortedResults = sortedResults
+                    .Where(x => x.FirstName.ToLower().Contains(listParameters.SearchTerm.ToLower()) ||
+                                x.LastName.ToLower().Contains(listParameters.SearchTerm.ToLower()) ||
+                                x.EmailAddress.ToLower().Contains(listParameters.SearchTerm.ToLower()));
+            }
+
+            return sortedResults
+            .Skip((Convert.ToInt16(listParameters.Page) - 1) * Convert.ToInt32(listParameters.Take))
+            .Take(Convert.ToInt16(listParameters.Take))
+            .ToList();
 
         }
         public void Delete(Customer customer)
