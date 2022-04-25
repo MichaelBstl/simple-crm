@@ -3,6 +3,9 @@
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <UserSecretsId>aspnet-SimpleCrm.WebApi-FD9F3691-2293-4B52-9C89-6DD8A9E9EE91</UserSecretsId>
+    <spaRoot>..\..\simple-crm-cli\</spaRoot>
+    <spaRootDest>ClientApp\</spaRootDest>
+    <BuildServerSideRendering>false</BuildServerSideRendering>
   </PropertyGroup>
 
   <ItemGroup>
@@ -10,12 +13,40 @@
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.24" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.24" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.24" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.24" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.24">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\SimpleCrm.sqlDbServices\SimpleCrm.SqlDbServices.csproj" />
     <ProjectReference Include="..\SimpleCrm\SimpleCrm.csproj" />
   </ItemGroup>
+  
+  <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') "> 
+	  <Exec Command="node --version" ContinueOnError="true">
+            <Output TaskParameter="ExitCode" PropertyName="ErrorCode" />
+      </Exec>
+      <Error Condition="'$(ErrorCode)' != '0'" Text="Node.js is required to build and run this project."></Error>
+      <Message Importance="high" Text="We are restoring Angular project node modules...please wait..."/>
+      <Exec WorkingDirectory="$(spaRoot)" Command="npm install" />
+  </Target>
 
+  <Target Name="PublishRunWebpack" AfterTargets="ComputeFilesToPublish">
+    <!-- As part of publishing, ensure the JS resources are freshly built in production mode -->
+    <Exec WorkingDirectory="$(SpaRoot)" Command="npm install" />
+    <Exec WorkingDirectory="$(SpaRoot)" Command="npm run build -- --prod" />
+    <Exec WorkingDirectory="$(SpaRoot)" Command="npm run build:ssr -- --prod" Condition=" '$(BuildServerSideRenderer)' == 'true' " />
+
+    <!-- Include the newly-built files in the publish output -->
+    <ItemGroup>
+      <DistFiles Include="$(SpaRoot)dist\simple-crm-cli\**; $(SpaRoot)dist-server\simple-crm-cli\**" />
+      <DistFiles Include="$(SpaRoot)node_modules\**" Condition="'$(BuildServerSideRenderer)' == 'true'" />
+      <ResolvedFileToPublish Include="@(DistFiles->'%(Identity)')" Exclude="@(ResolvedFileToPublish)">
+        <RelativePath>$(SpaRootDest)%(DistFiles.RecursiveDir)%(DistFiles.Filename)%(DistFiles.Extension)</RelativePath>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      </ResolvedFileToPublish>
+    </ItemGroup>
+  </Target>  
 </Project>
