@@ -13,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.SpaServices.AngularCli;
 
 namespace SimpleCrm.WebApi
 {
@@ -41,6 +42,12 @@ namespace SimpleCrm.WebApi
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews();
             services.AddRazorPages();
+
+            services.AddSpaStaticFiles(config =>
+            {
+                config.RootPath = Configuration["SpaRoot"];
+            });
+
             services.AddScoped<ICustomerData, SqlCustomerData>();
         }
 
@@ -73,6 +80,19 @@ namespace SimpleCrm.WebApi
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
             });
+
+            // add the next one at the END of the pipeline
+            app.UseWhen(
+              context => !context.Request.Path.StartsWithSegments("/api"),
+              appBuilder => appBuilder.UseSpa(spa =>
+              {
+                  if (env.IsDevelopment())
+                  {
+                      spa.Options.SourcePath = "../simple-crm-cli";
+                      spa.Options.StartupTimeout = new TimeSpan(0, 0, 300); //300 seconds
+                  spa.UseAngularCliServer(npmScript: "start");
+                  }
+              }));
         }
     }
 }

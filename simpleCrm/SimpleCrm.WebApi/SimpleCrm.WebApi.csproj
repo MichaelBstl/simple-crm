@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <UserSecretsId>aspnet-SimpleCrm.WebApi-FD9F3691-2293-4B52-9C89-6DD8A9E9EE91</UserSecretsId>
-    <spaRoot>..\..\simple-crm-cli\</spaRoot>
+    <spaRoot>..\simple-crm-cli\</spaRoot>
     <spaRootDest>ClientApp\</spaRootDest>
     <BuildServerSideRendering>false</BuildServerSideRendering>
   </PropertyGroup>
@@ -12,6 +12,8 @@
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.1.24" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.24" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.24" />
+    <PackageReference Include="Microsoft.AspNetCore.SpaServices" Version="3.1.24" />
+    <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="6.0.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.24" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.24">
       <PrivateAssets>all</PrivateAssets>
@@ -29,7 +31,7 @@
             <Output TaskParameter="ExitCode" PropertyName="ErrorCode" />
       </Exec>
       <Error Condition="'$(ErrorCode)' != '0'" Text="Node.js is required to build and run this project."></Error>
-      <Message Importance="high" Text="We are restoring Angular project node modules...please wait..."/>
+      <Message Importance="high" Text="We are restoring Angular project node modules...please wait..." />
       <Exec WorkingDirectory="$(spaRoot)" Command="npm install" />
   </Target>
 
