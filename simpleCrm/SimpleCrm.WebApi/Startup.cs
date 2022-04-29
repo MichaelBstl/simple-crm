@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
+using SimpleCrm.WebApi.Auth;
 
 namespace SimpleCrm.WebApi
 {
@@ -28,6 +29,21 @@ namespace SimpleCrm.WebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+            var googleOptions = Configuration.GetSection(nameof(GoogleAuthSettings));
+            services.Configure<GoogleAuthSettings>(options =>
+            {
+                options.ClientId = googleOptions[nameof(GoogleAuthSettings.ClientId)];
+                options.ClientSecret = googleOptions[nameof(GoogleAuthSettings.ClientSecret)];
+            });
+
+            var microsoftOptions = Configuration.GetSection(nameof(MicrosoftAuthSettings));
+            services.Configure<MicrosoftAuthSettings>(options =>
+            {
+                options.ClientId = microsoftOptions[nameof(MicrosoftAuthSettings.ClientId)];
+                options.ClientSecret = microsoftOptions[nameof(MicrosoftAuthSettings.ClientSecret)];
+            });
+
             services.AddDbContext<SimpleCrmDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("SimpleCrmConnection")));
@@ -36,6 +52,18 @@ namespace SimpleCrm.WebApi
                 options.UseSqlServer(
                     Configuration.GetConnectionString("SimpleCrmConnection")));
 
+            services.AddAuthentication()
+                .AddCookie(cfg => cfg.SlidingExpiration = true)
+                .AddGoogle(options =>  
+                    {
+                        options.ClientId = googleOptions[nameof(GoogleAuthSettings.ClientId)];
+                        options.ClientSecret = googleOptions[nameof(GoogleAuthSettings.ClientSecret)];
+                    })
+                .AddMicrosoftAccount(options =>
+                    {
+                        options.ClientId = microsoftOptions[nameof(MicrosoftAuthSettings.ClientId)];
+                        options.ClientSecret = microsoftOptions[nameof(MicrosoftAuthSettings.ClientSecret)];
+                    });
 
             services.AddDefaultIdentity<CrmUser>()
                 .AddDefaultUI()
@@ -50,6 +78,8 @@ namespace SimpleCrm.WebApi
             });
 
             services.AddScoped<ICustomerData, SqlCustomerData>();
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
