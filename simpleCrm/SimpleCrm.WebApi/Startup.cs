@@ -14,11 +14,16 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using SimpleCrm.WebApi.Auth;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace SimpleCrm.WebApi
 {
     public class Startup
     {
+        private const string SecretKey = "asdfeegeadfsadfjasldfjasdlfkjsszz";
+        private readonly SymmetricSecurityKey _signingKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(SecretKey));
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -52,22 +57,76 @@ namespace SimpleCrm.WebApi
                 options.UseSqlServer(
                     Configuration.GetConnectionString("SimpleCrmConnection")));
 
-            services.AddAuthentication()
-                .AddCookie(cfg => cfg.SlidingExpiration = true)
-                .AddGoogle(options =>  
-                    {
-                        options.ClientId = googleOptions[nameof(GoogleAuthSettings.ClientId)];
-                        options.ClientSecret = googleOptions[nameof(GoogleAuthSettings.ClientSecret)];
-                    })
-                .AddMicrosoftAccount(options =>
-                    {
-                        options.ClientId = microsoftOptions[nameof(MicrosoftAuthSettings.ClientId)];
-                        options.ClientSecret = microsoftOptions[nameof(MicrosoftAuthSettings.ClientSecret)];
-                    });
+            var jwtOptions = Configuration.GetSection(nameof(JwtIssuerOptions));
+            services.Configure<JwtIssuerOptions>(options =>
+            {
+                options.Issuer = jwtOptions[nameof(JwtIssuerOptions.Issuer)];
+                options.Audience = jwtOptions[nameof(JwtIssuerOptions.Audience)];
+                options.SigningCredentials = new SigningCredentials(_signingKey, SecurityAlgorithms.HmacSha256);
+            });
 
-            services.AddDefaultIdentity<CrmUser>()
-                .AddDefaultUI()
-                .AddEntityFrameworkStores<CrmIdentityDbContext>();
+            var tokenValidationPrms = new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidIssuer = jwtOptions[nameof(JwtIssuerOptions.Issuer)],
+                ValidateAudience = true,
+                ValidAudience = jwtOptions[nameof(JwtIssuerOptions.Audience)],
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = _signingKey,
+                RequireExpirationTime = false,
+                ValidateLifetime = true,
+                ClockSkew = TimeSpan.Zero
+            };
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(configureOptions =>
+            {
+                configureOptions.ClaimsIssuer = jwtOptions[nameof(JwtIssuerOptions.Issuer)];
+                configureOptions.TokenValidationParameters = tokenValidationPrms;
+                configureOptions.SaveToken = true;
+            });
+
+            services.AddAuthorization(options =>
+            {
+            options.AddPolicy("ApiUser", policy => policy.RequireClaim(
+                Constants.JwtClaimIdentifiers.Rol,
+                Constants.JwtClaims.ApiAccess));
+            });
+
+            services.AddSingleton<IJwtFactory, JwtFactory>();
+
+            var identityBuilder = services.AddIdentityCore<CrmUser>(o => {
+                //TODO: you may override any default password rules here.
+            });
+            identityBuilder = new IdentityBuilder(identityBuilder.UserType,
+              typeof(IdentityRole), identityBuilder.Services);
+            identityBuilder.AddEntityFrameworkStores<CrmIdentityDbContext>();
+            identityBuilder.AddRoleValidator<RoleValidator<IdentityRole>>();
+            identityBuilder.AddRoleManager<RoleManager<IdentityRole>>();
+            identityBuilder.AddSignInManager<SignInManager<CrmUser>>();
+            identityBuilder.AddDefaultTokenProviders();
+            /*
+                        services.AddAuthentication()
+                            .AddCookie(cfg => cfg.SlidingExpiration = true)
+                            .AddGoogle(options =>  
+                                {
+                                    options.ClientId = googleOptions[nameof(GoogleAuthSettings.ClientId)];
+                                    options.ClientSecret = googleOptions[nameof(GoogleAuthSettings.ClientSecret)];
+                                })
+                            .AddMicrosoftAccount(options =>
+                                {
+                                    options.ClientId = microsoftOptions[nameof(MicrosoftAuthSettings.ClientId)];
+                                    options.ClientSecret = microsoftOptions[nameof(MicrosoftAuthSettings.ClientSecret)];
+                                });
+
+            ***** being replaced with JWT
+                        services.AddDefaultIdentity<CrmUser>()
+                            .AddDefaultUI()
+                            .AddEntityFrameworkStores<CrmIdentityDbContext>();
+            */
             services.AddControllersWithViews();
 
             services.AddRazorPages();

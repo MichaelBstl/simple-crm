@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Routing;
 using Newtonsoft.Json;
@@ -11,6 +12,7 @@ using static Microsoft.AspNetCore.Mvc.ModelBinding.ModelStateDictionary;
 namespace SimpleCrm.WebApi.ApiControllers
 {
     [Route("api/customers")]
+    [Authorize(Policy = "ApiUser")]
     public class CustomerController : Controller
     {
         private readonly ICustomerData _customerData;

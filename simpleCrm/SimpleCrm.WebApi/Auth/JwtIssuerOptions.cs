@@ -1,16 +1,20 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 using System;
+using System.Threading.Tasks;
 
 namespace SimpleCrm.WebApi.Auth
 {
     public class JwtIssuerOptions
     {
-        string Issue { get; set; }
-        string Subject { get; set; }
-        string Audience { get; set; }
-        DateTime Expiration { get; set; }
-        DateTime NotBefore { get; set; }
-        DateTime IssuedAt { get; set; }
-        SigningCredentials SigningCredentials { get; set; }
+        public string Issuer { get; set; }
+        public string Subject { get; set; }
+        public string Audience { get; set; }
+        public DateTime Expiration => IssuedAt.Add(ValidFor);
+        public DateTime NotBefore => DateTime.UtcNow;
+        public DateTime IssuedAt => DateTime.UtcNow;
+        public TimeSpan ValidFor { get; set; } = TimeSpan.FromMinutes(120);
+        public SigningCredentials SigningCredentials { get; set; }
+        public Func<Task<string>> JtiGenerator =>
+            () => Task.FromResult(Guid.NewGuid().ToString());
     }
 }
