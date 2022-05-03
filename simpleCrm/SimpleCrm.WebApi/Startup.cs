@@ -96,37 +96,19 @@ namespace SimpleCrm.WebApi
                 Constants.JwtClaims.ApiAccess));
             });
 
-            services.AddSingleton<IJwtFactory, JwtFactory>();
-
             var identityBuilder = services.AddIdentityCore<CrmUser>(o => {
                 //TODO: you may override any default password rules here.
             });
-            identityBuilder = new IdentityBuilder(identityBuilder.UserType,
-              typeof(IdentityRole), identityBuilder.Services);
+            identityBuilder = new IdentityBuilder(
+                identityBuilder.UserType,
+                typeof(IdentityRole), 
+                identityBuilder.Services);
             identityBuilder.AddEntityFrameworkStores<CrmIdentityDbContext>();
             identityBuilder.AddRoleValidator<RoleValidator<IdentityRole>>();
             identityBuilder.AddRoleManager<RoleManager<IdentityRole>>();
             identityBuilder.AddSignInManager<SignInManager<CrmUser>>();
             identityBuilder.AddDefaultTokenProviders();
-            /*
-                        services.AddAuthentication()
-                            .AddCookie(cfg => cfg.SlidingExpiration = true)
-                            .AddGoogle(options =>  
-                                {
-                                    options.ClientId = googleOptions[nameof(GoogleAuthSettings.ClientId)];
-                                    options.ClientSecret = googleOptions[nameof(GoogleAuthSettings.ClientSecret)];
-                                })
-                            .AddMicrosoftAccount(options =>
-                                {
-                                    options.ClientId = microsoftOptions[nameof(MicrosoftAuthSettings.ClientId)];
-                                    options.ClientSecret = microsoftOptions[nameof(MicrosoftAuthSettings.ClientSecret)];
-                                });
 
-            ***** being replaced with JWT
-                        services.AddDefaultIdentity<CrmUser>()
-                            .AddDefaultUI()
-                            .AddEntityFrameworkStores<CrmIdentityDbContext>();
-            */
             services.AddControllersWithViews();
 
             services.AddRazorPages();
@@ -136,8 +118,8 @@ namespace SimpleCrm.WebApi
                 config.RootPath = Configuration["SpaRoot"];
             });
 
+            services.AddSingleton<IJwtFactory, JwtFactory>();
             services.AddScoped<ICustomerData, SqlCustomerData>();
-
 
         }
 

@@ -43,11 +43,6 @@ namespace SimpleCrm.WebApi.Auth
 
             return encodedJwt;
         }
-
-        private static long ToUnixEpochDate(DateTime date) => (long)Math.Round((date.ToUniversalTime()  - 
-                                                    new DateTimeOffset(1970, 1, 1, 0, 0, 0, TimeSpan.Zero))
-                                                    .TotalSeconds);
-
         public ClaimsIdentity GenerateClaimsIdentity(string userName, string id)
         {
             return new ClaimsIdentity(new GenericIdentity(userName, "Token"), new[]
@@ -56,6 +51,9 @@ namespace SimpleCrm.WebApi.Auth
                       new Claim(Constants.JwtClaimIdentifiers.Rol, Constants.JwtClaims.ApiAccess)
                   });
         }
+        private static long ToUnixEpochDate(DateTime date) => (long)Math.Round((date.ToUniversalTime() -
+                                                    new DateTimeOffset(1970, 1, 1, 0, 0, 0, TimeSpan.Zero))
+                                                    .TotalSeconds);
 
         private static void ThrowIfInvalidOptions(JwtIssuerOptions options) {
             throw new Exception("not build out yet");

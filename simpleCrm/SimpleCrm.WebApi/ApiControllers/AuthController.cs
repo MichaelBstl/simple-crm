@@ -15,7 +15,7 @@ namespace SimpleCrm.WebApi.ApiControllers
 
         public AuthController(
             UserManager<CrmUser> userManager,
-            JwtFactory jwtFactory
+            IJwtFactory jwtFactory
         )
         {
             _userManager = userManager;
@@ -38,9 +38,7 @@ namespace SimpleCrm.WebApi.ApiControllers
                 return UnprocessableEntity("Invalid username or password.");
             }
 
-            // TODO: add GetUserData method (see lesson below)
             var userModel = await GetUserData(user);
-            // returns a UserSummaryViewModel containing a JWT and other user info
             return Ok(userModel);
         }
         private async Task<CrmUser> Authenticate(string emailAddress, string password)
