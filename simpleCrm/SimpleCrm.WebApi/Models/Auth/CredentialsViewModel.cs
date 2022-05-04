@@ -1,7 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace SimpleCrm.WebApi.Models
+namespace SimpleCrm.WebApi.Models.Auth
 {
     public class CredentialsViewModel
     {
@@ -12,3 +12,4 @@ namespace SimpleCrm.WebApi.Models
 
     }
 }
+

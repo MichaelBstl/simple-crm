@@ -1,7 +1,14 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using SimpleCrm.WebApi.Auth;
 using SimpleCrm.WebApi.Models;
+using SimpleCrm.WebApi.Models.Auth;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -12,26 +19,94 @@ namespace SimpleCrm.WebApi.ApiControllers
     {
         private readonly UserManager<CrmUser> _userManager;
         private readonly IJwtFactory _jwtFactory;
+        private readonly IConfiguration _configuration;
+        private readonly ILogger<AuthController> _logger;
+        private readonly MicrosoftAuthSettings _microsoftAuthSettings;
 
         public AuthController(
             UserManager<CrmUser> userManager,
-            IJwtFactory jwtFactory
+            IJwtFactory jwtFactory,
+            IConfiguration configuration,
+            ILogger<AuthController> logger,
+            IOptions<MicrosoftAuthSettings> microsoftAuthSettings
         )
         {
             _userManager = userManager;
             _jwtFactory = jwtFactory;
+            _configuration = configuration;
+            _logger = logger;
+            _microsoftAuthSettings = microsoftAuthSettings.Value;
         }
 
+        [HttpGet("external/microsoft")]
+        public IActionResult GetMicrosoft()
+        {   // only needed for the client to know what to send to Microsoft on the front-end redirect to login with Microsoft
+            return Ok(new
+            {   //this is the public application id, don't return the secret 'Password' here!
+                client_id = _microsoftAuthSettings.ClientId,
+                scope = "https://graph.microsoft.com/user.read",
+                state = "" //arbitrary state to return again for this user
+            });
+        }
+
+        [HttpPost("external/microsoft")]
+        public async Task<IActionResult> PostMicrosoft([FromBody] MicrosoftAuthViewModel model)
+        {
+            var verifier = new MicrosoftAuthVerifier<AuthController>(_microsoftAuthSettings, _configuration["HttpHost"] + (model.BaseHref ?? "/"), _logger);
+            var profile = await verifier.AcquireUser(model.AccessToken);
+
+            if (!profile.IsSuccessful)
+            {
+                _logger.LogWarning("ExternalLoginCallback() unknown error at external login provider, (profile.ErrorMessage)", profile.Error.Message);
+                return StatusCode(StatusCodes.Status400BadRequest, profile.Error.Message);
+            }
+            var info = new UserLoginInfo("Microsoft", profile.Id, "Microsoft");
+            if (info == null || info.ProviderKey == null || info.LoginProvider == null)
+            {
+                _logger.LogWarning("ExternalLoginCallback() unknown error at external login provider");
+                return StatusCode(StatusCodes.Status400BadRequest, "Unknown error at external login provider");
+            }
+            if (string.IsNullOrWhiteSpace(profile.Mail))
+            {
+                return StatusCode(StatusCodes.Status403Forbidden, "Email Address not available from provider.");
+            }
+
+            var user = await _userManager.FindByEmailAsync(profile.Mail);
+            if (user == null)
+            {
+                var appUser = new CrmUser
+                {
+                    DisplayName = profile.DisplayName,
+                    Email = profile.Mail,
+                    UserName = profile.Mail,
+                    PhoneNumber = profile.MobilePhone
+                };
+
+                var password = Convert.ToBase64String(Guid.NewGuid().ToByteArray()).Substring(0, 8) + "#1aA";
+                var identityResult = await _userManager.CreateAsync(appUser, password); 
+                if (!identityResult.Succeeded)
+                {
+                    return StatusCode(StatusCodes.Status400BadRequest, "Could not create user.");
+                }
+
+                user = await _userManager.FindByEmailAsync(profile.Mail);
+                if (user == null)
+                {
+                    return StatusCode(StatusCodes.Status400BadRequest, "faild to create local user");
+                }
+            }
+            var userModel = await GetUserData(user);
+            return Ok(userModel);
+        }
 
         [HttpPost("login")]
         public async Task<IActionResult> Post([FromBody] CredentialsViewModel credentials)
-        { // TODO: create a CredentialsViewModel class in the next assignment
+        {
             if (!ModelState.IsValid)
             {
                 return UnprocessableEntity(ModelState);
             }
 
-            // TODO: add Authenticate method (see lesson below)
             var user = await Authenticate(credentials.EmailAddress, credentials.Password);
             if (user == null)
             {
@@ -57,6 +132,7 @@ namespace SimpleCrm.WebApi.ApiControllers
             }
 
             var validUser = await _userManager.CheckPasswordAsync(user, password);
+            
             if (validUser)
             {
                 return await Task.FromResult(user);
@@ -65,6 +141,23 @@ namespace SimpleCrm.WebApi.ApiControllers
             {
                 return await Task.FromResult<CrmUser>(null);
             }
+        }
+        [Authorize(Policy = "ApiUser")]
+        [HttpPost("verify")] // POST api/auth/verify
+        public async Task<IActionResult> Verify()
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                var userIdClaim = User.Claims.Single(c => c.Type == "id");
+                var user = _userManager.Users.FirstOrDefault(x => x.Id.ToString() == userIdClaim.Value);
+                if (user == null)
+                    return Forbid();
+
+                var userModel = await GetUserData(user);
+                return new ObjectResult(userModel);
+            }
+
+            return Forbid();
         }
         private async Task<UserSummaryViewModel> GetUserData(CrmUser user)
         {
