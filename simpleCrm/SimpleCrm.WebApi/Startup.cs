@@ -17,6 +17,8 @@ using SimpleCrm.WebApi.Auth;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using NSwag.Generation.Processors.Security;
+using NSwag;
 
 namespace SimpleCrm.WebApi
 {
@@ -121,8 +123,25 @@ namespace SimpleCrm.WebApi
             services.AddSingleton<IJwtFactory, JwtFactory>();
             services.AddScoped<ICustomerData, SqlCustomerData>();
 
-            // Register the Swagger services
-            services.AddSwaggerDocument();
+            services.AddOpenApiDocument(options =>
+            {
+                options.DocumentName = "v1";
+                options.Title = "Simple CRM - MLB";
+                options.Version = "1.0";
+                options.DocumentProcessors.Add(new SecurityDefinitionAppender("JWT token",
+                new List<string>(),
+                new OpenApiSecurityScheme
+                {
+                    In = OpenApiSecurityApiKeyLocation.Header,
+                    Name = "Authorization",
+                    Type = OpenApiSecuritySchemeType.ApiKey,
+                    Description = "Type into the textbox: 'Bearer {your_JWT_token}'. You can get a JWT from endpoints: '/auth/register' or '/auth/login'"
+                }
+                ));
+                options.OperationProcessors.Add(
+                    new OperationSecurityScopeProcessor("JWT token")
+                );
+            });
 
         }
 

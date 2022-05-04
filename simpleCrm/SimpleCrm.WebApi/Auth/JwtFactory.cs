@@ -56,7 +56,25 @@ namespace SimpleCrm.WebApi.Auth
                                                     .TotalSeconds);
 
         private static void ThrowIfInvalidOptions(JwtIssuerOptions options) {
-            throw new Exception("not build out yet");
+            if (options == null)
+            { 
+                throw new ArgumentNullException(nameof(options));
+            }
+
+            if (options.ValidFor <= TimeSpan.Zero)
+            {
+                throw new ArgumentException("Must be positive non-zero TimeSpan.", nameof(JwtIssuerOptions.ValidFor));
+            }
+
+            if (options.SigningCredentials == null)
+            {
+                throw new ArgumentNullException(nameof(JwtIssuerOptions.SigningCredentials));
+            }
+
+            if (options.JtiGenerator == null)
+            {
+                throw new ArgumentNullException(nameof(JwtIssuerOptions.JtiGenerator));
+            }
         }
     }
 }
