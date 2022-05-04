@@ -116,6 +116,29 @@ namespace SimpleCrm.WebApi.ApiControllers
             var userModel = await GetUserData(user);
             return Ok(userModel);
         }
+        [HttpPost("register")]
+        public async Task<IActionResult> Register([FromBody] RegisterViewModel userData)
+        {
+            if (!ModelState.IsValid)
+            {
+                return UnprocessableEntity(ModelState);
+            }
+
+            var user = new CrmUser
+            {
+                DisplayName = userData.Name,
+                Email = userData.EmailAddress,
+                UserName = userData.EmailAddress
+            };
+
+            var response = _userManager.CreateAsync(user, userData.Password);
+
+            _logger.LogInformation("User {0} Created", userData.Name);
+            var identity = await Authenticate(userData.EmailAddress, userData.Password);
+            var userModel = await GetUserData(identity);
+
+            return Ok(userModel);
+        }
         private async Task<CrmUser> Authenticate(string emailAddress, string password)
         {
             if (string.IsNullOrEmpty(emailAddress) ||
