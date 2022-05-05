@@ -87,6 +87,7 @@ namespace SimpleCrm.WebApi.ApiControllers
             {
                 return NotFound(); // 404
             }
+            Response.Headers.Add("ETag", "\"" + customer.LastContactDate.ToString() + "\"");
             var models = new CustomerDisplayViewModel(customer);
 
             return Ok(models); // 200
@@ -115,6 +116,8 @@ namespace SimpleCrm.WebApi.ApiControllers
 
             _customerData.Add(customer);
             _customerData.Commit();
+
+            Response.Headers.Add("ETag", "\"" + customer.LastContactDate.ToString() + "\"");
             return Ok(new CustomerDisplayViewModel(customer)); // 201  ToDo: generate a link
         }
         [HttpPut("{id}")] //  ./api/customers/:id
@@ -131,6 +134,12 @@ namespace SimpleCrm.WebApi.ApiControllers
             }
 
             var customer = _customerData.Get(id);
+
+            string ifMatch = Request.Headers["If-Match"];
+            if (ifMatch != customer.LastContactDate.ToString())
+            {
+                return StatusCode(422, "Data changed by another user.  Reload customer & retry operation.");
+            }
             if (customer == null)
             {
                 return NotFound(); // 404
