@@ -28,6 +28,7 @@ namespace SimpleCrm.WebApi.ApiControllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("", Name = "GetCustomers")] //  ./api/customers
+        [ResponseCache(Duration = 30, Location = ResponseCacheLocation.Client)]
         public IActionResult GetAll([FromQuery]CustomerListParameters resourceParameters)
         {
             if (resourceParameters.Page == null)

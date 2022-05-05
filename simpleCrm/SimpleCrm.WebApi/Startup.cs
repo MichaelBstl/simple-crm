@@ -19,6 +19,7 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using NSwag.Generation.Processors.Security;
 using NSwag;
+using Microsoft.Net.Http.Headers;
 
 namespace SimpleCrm.WebApi
 {
@@ -142,7 +143,7 @@ namespace SimpleCrm.WebApi
                     new OperationSecurityScopeProcessor("JWT token")
                 );
             });
-
+            services.AddResponseCaching();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -160,7 +161,15 @@ namespace SimpleCrm.WebApi
                 app.UseHsts();
             }
             app.UseHttpsRedirection();
-            app.UseStaticFiles();
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                OnPrepareResponse = ctx =>
+                {
+                    const int durationInSeconds = 60 * 60 * 24; // 1 day
+                    ctx.Context.Response.Headers[HeaderNames.CacheControl] =
+                        "public,max-age=" + durationInSeconds;
+                }
+            });
             app.UseSpaStaticFiles();
 
             // Register the Swagger generator and the Swagger UI middlewares
@@ -168,6 +177,8 @@ namespace SimpleCrm.WebApi
             app.UseSwaggerUi3();
 
             app.UseRouting();
+
+            app.UseResponseCaching();
 
             app.UseAuthentication();
             app.UseAuthorization();

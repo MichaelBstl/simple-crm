@@ -19,6 +19,7 @@ namespace SimpleCrm.WebApi.Controllers
             _logger = logger;
         }
         [Route("")]
+        [ResponseCache(Duration = 31, Location = ResponseCacheLocation.Client)]
         public IActionResult Index()
         {
             return View();
@@ -47,6 +48,7 @@ namespace SimpleCrm.WebApi.Controllers
             return View();
         }
         [Route("firstpage")]
+        [ResponseCache(Duration = 31, Location = ResponseCacheLocation.Client)]
         public IActionResult FirstPage()
         {
             ViewData["Message"] = "This is my first marketing page.";
