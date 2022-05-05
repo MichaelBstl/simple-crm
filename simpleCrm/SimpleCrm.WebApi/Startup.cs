@@ -20,6 +20,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using NSwag.Generation.Processors.Security;
 using NSwag;
 using Microsoft.Net.Http.Headers;
+using System.Text.Json.Serialization;
 
 namespace SimpleCrm.WebApi
 {
@@ -112,7 +113,12 @@ namespace SimpleCrm.WebApi
             identityBuilder.AddSignInManager<SignInManager<CrmUser>>();
             identityBuilder.AddDefaultTokenProviders();
 
-            services.AddControllersWithViews();
+            services.AddControllersWithViews()
+                .AddJsonOptions(opts =>
+                {
+                    opts.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                    opts.JsonSerializerOptions.AllowTrailingCommas = true;
+                });
 
             services.AddRazorPages();
 

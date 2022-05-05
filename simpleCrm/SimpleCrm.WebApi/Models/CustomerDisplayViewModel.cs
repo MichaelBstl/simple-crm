@@ -15,9 +15,9 @@ namespace SimpleCrm.WebApi.Models
             LastName = customer.LastName;
             PhoneNumber = customer.PhoneNumber;
             EmailAddress = customer.EmailAddress;
-            PreferredContactMethod = Enum.GetName(typeof(InteractionMethod), customer.ContactMethod);
-            Status = Enum.GetName(typeof(InteractionMethod), customer.Status);
-            LastContactDate = customer.LastContactDate.Year > 1 ? customer.LastContactDate.ToString("s", CultureInfo.InstalledUICulture) : "";
+            PreferredContactMethod = customer.ContactMethod;  //Enum.GetName(typeof(InteractionMethod), customer.ContactMethod);
+            Status = customer.Status; //Enum.GetName(typeof(InteractionMethod), customer.Status);
+            LastContactDate = customer.LastContactDate; //customer.LastContactDate.Year > 1 ? customer.LastContactDate.ToString("s", CultureInfo.InstalledUICulture) : "";
 
         }
         public int CustomerId { get; set; }
@@ -25,8 +25,8 @@ namespace SimpleCrm.WebApi.Models
         public string LastName { get; set; }
         public string PhoneNumber { get; set; }
         public string EmailAddress { get; set; }
-        public string PreferredContactMethod { get; set; }
-        public string Status { get; set; }
-        public string LastContactDate { get; set; }
+        public InteractionMethod PreferredContactMethod { get; set; }
+        public CustomerStatus Status { get; set; }
+        public DateTime LastContactDate { get; set; }
     }
 }
