@@ -22,7 +22,8 @@ namespace SimpleCrm.WebApi.Controllers
         [ResponseCache(Duration = 31, Location = ResponseCacheLocation.Client)]
         public IActionResult Index()
         {
-            return View();
+            throw new ApiException("An exceptional test. :)");
+//            return View();
         }
         [Route("Privacy")]
         public IActionResult Privacy()

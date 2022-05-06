@@ -21,6 +21,7 @@ using NSwag.Generation.Processors.Security;
 using NSwag;
 using Microsoft.Net.Http.Headers;
 using System.Text.Json.Serialization;
+using SimpleCrm.WebApi.Filters;
 
 namespace SimpleCrm.WebApi
 {
@@ -113,7 +114,10 @@ namespace SimpleCrm.WebApi
             identityBuilder.AddSignInManager<SignInManager<CrmUser>>();
             identityBuilder.AddDefaultTokenProviders();
 
-            services.AddControllersWithViews()
+            services.AddControllersWithViews(o =>
+            {
+                o.Filters.Add(typeof(GlobalExceptionFilter));
+            })
                 .AddJsonOptions(opts =>
                 {
                     opts.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
