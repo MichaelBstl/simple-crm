@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using SimpleCrm.WebApi.Models;
 using System;
@@ -17,11 +18,13 @@ namespace SimpleCrm.WebApi.ApiControllers
     {
         private readonly ICustomerData _customerData;
         private readonly LinkGenerator _linkGenerator;
+        private readonly ILogger<CustomerController> _logger;
 
-        public CustomerController(ICustomerData customerData, LinkGenerator linkGenerator)
+        public CustomerController(ICustomerData customerData, LinkGenerator linkGenerator, ILogger<CustomerController> logger)
         {
             _customerData = customerData;
             _linkGenerator = linkGenerator;
+            _logger = logger;
         }
         /// <summary>
         /// Gets all customers visible in the account of the current user
@@ -53,6 +56,7 @@ namespace SimpleCrm.WebApi.ApiControllers
             var models = customers.Select(c => new CustomerDisplayViewModel(c));
 
             Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(pagination));
+            _logger.LogInformation("Returning {0} customers", customers.Count);
 
             return Ok(models); //200
 
@@ -90,6 +94,8 @@ namespace SimpleCrm.WebApi.ApiControllers
             Response.Headers.Add("ETag", "\"" + customer.LastContactDate.ToString() + "\"");
             var models = new CustomerDisplayViewModel(customer);
 
+            _logger.LogInformation("Returning customer {0}", customer.Id);
+
             return Ok(models); // 200
         }
         [HttpPost("")] //  ./api/customers
@@ -116,9 +122,10 @@ namespace SimpleCrm.WebApi.ApiControllers
 
             _customerData.Add(customer);
             _customerData.Commit();
+            _logger.LogInformation("Added customer: {0}", customer.EmailAddress);
 
             Response.Headers.Add("ETag", "\"" + customer.LastContactDate.ToString() + "\"");
-            return Ok(new CustomerDisplayViewModel(customer)); // 201  ToDo: generate a link
+            return Ok(new CustomerDisplayViewModel(customer)); 
         }
         [HttpPut("{id}")] //  ./api/customers/:id
         public IActionResult Update(int id, [FromBody] CustomerUpdateViewModel model)
@@ -156,6 +163,7 @@ namespace SimpleCrm.WebApi.ApiControllers
 
             _customerData.Update(customer);
             _customerData.Commit();
+            _logger.LogInformation("Updated customer {0}", customer.Id);
             return NoContent();  // 204
         }
         [HttpDelete("{id}")] //  ./api/customers/:id
@@ -168,6 +176,7 @@ namespace SimpleCrm.WebApi.ApiControllers
             }
             _customerData.Delete(customer);
             _customerData.Commit();
+            _logger.LogInformation("Deleted customer {0}", customer.Id);
             return NoContent(); // 204
         }
     }
