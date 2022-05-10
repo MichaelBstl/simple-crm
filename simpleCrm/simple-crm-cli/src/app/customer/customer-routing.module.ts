@@ -12,6 +12,11 @@ const routes: Routes = [
     component: CustomerListPageComponent
   },
   {
+    path: 'altcustomers',
+    pathMatch: 'full',
+    component: CustomerListPageAltComponent
+  },
+  {
     path: 'customer/:id',
     pathMatch: 'full',
     component: CustomerDetailComponent

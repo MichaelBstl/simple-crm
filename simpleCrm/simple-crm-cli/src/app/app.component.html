@@ -14,6 +14,11 @@
           <h4 matLine>Customers</h4>
         </a>
         <a mat-list-item matRipple [style.position]="'relative'"
+          routerLinkActive="selected" [routerLink]="['/altcustomers']">
+          <mat-icon matListIcon>home</mat-icon>
+          <h4 matLine>Alternative Customers</h4>
+        </a>
+        <a mat-list-item matRipple [style.position]="'relative'"
           routerLinkActive="selected" [routerLink]="['.']">
           <mat-icon matListIcon>chat</mat-icon>
           <h4 matLine>Pipeline</h4>
