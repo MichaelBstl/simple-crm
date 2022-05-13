@@ -56,7 +56,8 @@ export class CustomerMockService extends CustomerService {
     this .lastCustomerId = Math.max(...this.customers.map(x => x.customerId));
   }
   override search(term: string): Observable<Customer[]> {
-    return of(this.customers.filter(x => x.firstName || x.lastName == term));
+    console.log(this.customers.filter(x => x.firstName.includes(term) || x.lastName.includes(term)))
+    return of(this.customers.filter(x => x.firstName.includes(term) || x.lastName.includes(term)));
   }
   override insert(customer: Customer): Observable<Customer> {
     customer.customerId = Math.max(...this.customers.map(x => x.customerId)) + 1;

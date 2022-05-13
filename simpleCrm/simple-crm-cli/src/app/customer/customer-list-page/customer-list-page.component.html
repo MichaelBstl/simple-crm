@@ -2,11 +2,13 @@
   <mat-card-title fxLayout>
     <span>Customers</span>
     <span fxFlex> </span>
+    <input id="inputBox" type="text" [formControl]="filterInput">
+    <span fxFlex> </span>
     <button class="addButton" mat-mini-fab color="primary" (click)="addCustomer()">
       <mat-icon aria-label="Add Customer">add</mat-icon>
     </button>
   </mat-card-title>
-  <table mat-table [dataSource]="customers$" matSort>
+  <table mat-table [dataSource]="filteredCustomers$" matSort>
     <ng-container matColumnDef="name">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
       <td mat-cell *matCellDef="let row"> {{row.firstName | uppercase}} {{row.lastName | lowercase}} </td>
@@ -41,6 +43,6 @@
   </mat-card>
   <mat-card>
     <pre>
-      {{customers$ | async | json}}
+      {{filteredCustomers$ | async | json}}
     </pre>
   </mat-card>
