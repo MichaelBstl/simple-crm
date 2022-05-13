@@ -4,22 +4,26 @@ import { CustomerDetailComponent } from './customer-detail/customer-detail.compo
 import { CustomerListPageComponent } from './customer-list-page/customer-list-page.component';
 import { CustomerListPageAltComponent } from './customer-list-page-alt/customer-list-page-alt.component';
 import { ActivatedRoute } from '@angular/router';
+import { AuthenticatedGuard } from '../account/authenticated.guard';
 
 const routes: Routes = [
   {
     path: 'customers',
     pathMatch: 'full',
-    component: CustomerListPageComponent
+    component: CustomerListPageComponent,
+    canActivate: [AuthenticatedGuard]
   },
   {
     path: 'altcustomers',
     pathMatch: 'full',
-    component: CustomerListPageAltComponent
+    component: CustomerListPageAltComponent,
+    canActivate: [AuthenticatedGuard]
   },
   {
     path: 'customer/:id',
     pathMatch: 'full',
-    component: CustomerDetailComponent
+    component: CustomerDetailComponent,
+    canActivate: [AuthenticatedGuard]
   }
 ];
 
