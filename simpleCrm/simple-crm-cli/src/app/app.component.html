@@ -4,7 +4,7 @@
         <mat-icon>menu</mat-icon>
     </button>
     <span class="title">{{title}}</span>
-  </mat-toolbar>
+</mat-toolbar>
   <mat-sidenav-container style="flex:1 100%">
     <mat-sidenav #sidenav [opened]="true" [mode]="'side'">
       <mat-nav-list>
@@ -19,9 +19,9 @@
           <h4 matLine>Alternative Customers</h4>
         </a>
         <a mat-list-item matRipple [style.position]="'relative'"
-          routerLinkActive="selected" [routerLink]="['.']">
+          routerLinkActive="selected" [routerLink]="['/login']">
           <mat-icon matListIcon>chat</mat-icon>
-          <h4 matLine>Pipeline</h4>
+          <h4 matLine>Login</h4>
         </a>
       </mat-nav-list>
     </mat-sidenav>

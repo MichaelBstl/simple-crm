@@ -10,14 +10,12 @@ const routes: Routes = [
   {
     path: 'customers',
     pathMatch: 'full',
-    component: CustomerListPageComponent,
-    canActivate: [AuthenticatedGuard]
+    component: CustomerListPageComponent
   },
   {
     path: 'altcustomers',
     pathMatch: 'full',
-    component: CustomerListPageAltComponent,
-    canActivate: [AuthenticatedGuard]
+    component: CustomerListPageAltComponent
   },
   {
     path: 'customer/:id',

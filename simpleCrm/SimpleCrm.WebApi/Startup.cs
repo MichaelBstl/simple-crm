@@ -171,6 +171,8 @@ namespace SimpleCrm.WebApi
                 app.UseHsts();
             }
             app.UseHttpsRedirection();
+            app.UseResponseCaching();
+
             app.UseStaticFiles(new StaticFileOptions
             {
                 OnPrepareResponse = ctx =>
@@ -182,16 +184,14 @@ namespace SimpleCrm.WebApi
             });
             app.UseSpaStaticFiles();
 
-            // Register the Swagger generator and the Swagger UI middlewares
-            app.UseOpenApi();
-            app.UseSwaggerUi3();
-
             app.UseRouting();
-
-            app.UseResponseCaching();
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            // Register the Swagger generator and the Swagger UI middlewares
+            app.UseOpenApi();
+            app.UseSwaggerUi3();
 
             app.UseEndpoints(endpoints =>
             {

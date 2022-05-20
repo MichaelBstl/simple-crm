@@ -23,6 +23,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { StatusIconPipe } from './status-icon.pipe';
 import { CustomerListPageAltComponent } from './customer-list-page-alt/customer-list-page-alt.component';
 import { MatListModule } from '@angular/material/list';
+import { AccountModule } from '../account/account.module';
 @NgModule({
   declarations: [
     CustomerListPageComponent,
@@ -46,7 +47,8 @@ import { MatListModule } from '@angular/material/list';
     ReactiveFormsModule,
     MatSelectModule,
     MatSnackBarModule,
-    MatListModule
+    MatListModule,
+    AccountModule
   ],
   providers: [
     {

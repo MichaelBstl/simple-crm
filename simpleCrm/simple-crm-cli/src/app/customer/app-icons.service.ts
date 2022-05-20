@@ -13,5 +13,7 @@ export class AppIconsService {
       this.iconRegistry.addSvgIcon('running', this.sanitizer.bypassSecurityTrustResourceUrl('assets/exercise-game-svgrepo-com.svg'));
       this.iconRegistry.addSvgIcon('cycling', this.sanitizer.bypassSecurityTrustResourceUrl('assets/bicycle-bike-svgrepo-com.svg'));
       this.iconRegistry.addSvgIcon('sleeping', this.sanitizer.bypassSecurityTrustResourceUrl('assets/wrath-angry-anger-svgrepo-com.svg'));
+      this.iconRegistry.addSvgIcon('microsoft', this.sanitizer.bypassSecurityTrustResourceUrl('assets/microsoft.svg'));
+      this.iconRegistry.addSvgIcon('google', this.sanitizer.bypassSecurityTrustResourceUrl('assets/google.svg'));
     }
 }

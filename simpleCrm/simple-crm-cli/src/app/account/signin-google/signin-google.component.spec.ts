@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { NotAuthorizedComponent } from './not-authorized.component';
+import { SigninGoogleComponent } from './signin-google.component';
 
-describe('NotAuthorizedComponent', () => {
-  let component: NotAuthorizedComponent;
-  let fixture: ComponentFixture<NotAuthorizedComponent>;
+describe('SigninGoogleComponent', () => {
+  let component: SigninGoogleComponent;
+  let fixture: ComponentFixture<SigninGoogleComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ NotAuthorizedComponent ]
+      declarations: [ SigninGoogleComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(NotAuthorizedComponent);
+    fixture = TestBed.createComponent(SigninGoogleComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

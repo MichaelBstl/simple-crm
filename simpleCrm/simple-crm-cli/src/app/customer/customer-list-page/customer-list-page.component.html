@@ -7,7 +7,13 @@
     <button class="addButton" mat-mini-fab color="primary" (click)="addCustomer()">
       <mat-icon aria-label="Add Customer">add</mat-icon>
     </button>
-  </mat-card-title>
+    <div *ngIf="loggedIn()">
+    <a mat-list-item matRipple [style.position]="'relative'"
+      routerLinkActive="selected" (click)="logout()" [routerLink]="['/customers']">
+      <h4 matLine>Logout</h4>
+    </a>
+    </div>
+</mat-card-title>
   <table mat-table [dataSource]="filteredCustomers$" matSort>
     <ng-container matColumnDef="name">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>

@@ -105,7 +105,7 @@ namespace SimpleCrm.WebApi.Auth
                     IsSuccessful = true,
                     Context = graphPayload.Value<string>("@odata.context"),
                     Id = graphPayload.Value<string>("id"),
-                    BusinessPhones = graphPayload.Value<string[]>("businessPhones"),
+//                    BusinessPhones = graphPayload.Value<string[]>("businessPhones"),
                     DisplayName = graphPayload.Value<string>("displayName"),
                     GivenName = graphPayload.Value<string>("givenName"),
                     JobTitle = graphPayload.Value<string>("jobTitle"),

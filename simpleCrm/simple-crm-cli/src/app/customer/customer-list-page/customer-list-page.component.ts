@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
 import {MatDialog} from '@angular/material/dialog';
 import { MatInputModule} from '@angular/material/input';
 import { FormControl } from '@angular/forms';
+import { AccountService } from 'src/app/account/account.service';
 @Component({
   selector: 'crm-customer-list-page',
   templateUrl: './customer-list-page.component.html',
@@ -20,7 +21,8 @@ export class CustomerListPageComponent implements OnInit {
   constructor(
     private customerService: CustomerService,
     private router: Router,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private accountService: AccountService
     ) {
       this.filteredCustomers$ = this.filterInput.valueChanges.pipe(
         startWith(''),
@@ -49,5 +51,17 @@ export class CustomerListPageComponent implements OnInit {
   goToDetails(customer: Customer): void {
     this.router.navigate([`./customer/${customer.customerId}`]);
   }
+  logout(): void  {
+    this.accountService.logout( {navigate: true});
+    this.router.navigate(['login'])
+  }
+  loggedIn(): boolean {
+    let user = this.accountService.user;
 
+    if (user &&
+        user.value.name != 'Anonymous')
+      return  true;
+    else
+    return false;
+  }
 }

@@ -13,13 +13,11 @@ import { MatListModule } from '@angular/material/list'
 import { CustomerModule } from './customer/customer.module';
 import { MatButtonModule } from '@angular/material/button';
 import { AppIconsService } from './customer/app-icons.service';
-import { NotAuthorizedComponent } from './account/not-authorized/not-authorized.component';
 import { AccountModule } from './account/account.module';
 
 @NgModule({
   declarations: [
-    AppComponent,
-    NotAuthorizedComponent
+    AppComponent
   ],
   imports: [
     BrowserModule,
@@ -31,7 +29,8 @@ import { AccountModule } from './account/account.module';
     MatIconModule,
     MatListModule,
     CustomerModule,
-    MatButtonModule
+    MatButtonModule,
+    AccountModule
   ],
   providers: [AppIconsService],
   bootstrap: [AppComponent]
