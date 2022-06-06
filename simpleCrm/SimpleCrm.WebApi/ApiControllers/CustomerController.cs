@@ -38,6 +38,11 @@ namespace SimpleCrm.WebApi.ApiControllers
             {
                 resourceParameters.Page = 1;
             }
+
+            if (resourceParameters.Take == null)
+            {
+                resourceParameters.Take = 10;
+            }
             if (resourceParameters.Take > 50 ||
                 resourceParameters.Take < 1 ||
                 resourceParameters.Page < 1)

@@ -14,6 +14,8 @@ import { CustomerModule } from './customer/customer.module';
 import { MatButtonModule } from '@angular/material/button';
 import { AppIconsService } from './customer/app-icons.service';
 import { AccountModule } from './account/account.module';
+import { JwtInterceptorInterceptor } from './account/jwt-interceptor.interceptor';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -32,10 +34,18 @@ import { AccountModule } from './account/account.module';
     MatButtonModule,
     AccountModule
   ],
-  providers: [AppIconsService],
+  providers: [{
+      provide: HTTP_INTERCEPTORS,
+      useClass: JwtInterceptorInterceptor,
+      multi: true
+      },
+    AppIconsService],
   bootstrap: [AppComponent]
 })
 export class AppModule {
     // simply passing in the icon service, instantiates it and registers its icons
-    constructor(iconService: AppIconsService) {}  // <-- NEW
+    constructor(
+      iconService: AppIconsService
+    )
+    {}
  }

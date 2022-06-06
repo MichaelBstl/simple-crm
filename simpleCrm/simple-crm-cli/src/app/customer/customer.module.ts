@@ -8,7 +8,6 @@ import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
 import { HttpClientModule } from '@angular/common/http';
 import { CustomerService } from './customer.service';
-import { CustomerMockService } from './customer-mock.service';
 import { environment } from 'src/environments/environment';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatIconModule} from '@angular/material/icon';
@@ -53,7 +52,7 @@ import { AccountModule } from '../account/account.module';
   providers: [
     {
       provide: CustomerService,
-      useClass: environment.production ? CustomerService : CustomerMockService
+      useClass: CustomerService
     }
   ]
 })
