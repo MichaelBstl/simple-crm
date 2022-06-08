@@ -16,6 +16,9 @@ import { AppIconsService } from './customer/app-icons.service';
 import { AccountModule } from './account/account.module';
 import { JwtInterceptorInterceptor } from './account/jwt-interceptor.interceptor';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { StoreModule } from '@ngrx/store';
+import { layoutFeatureKey, layoutReducer } from './store/layout.store';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
 @NgModule({
   declarations: [
@@ -32,7 +35,12 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
     MatListModule,
     CustomerModule,
     MatButtonModule,
-    AccountModule
+    AccountModule,
+    StoreModule.forRoot({}), // for no global state, use an empty object,  {}.
+    StoreModule.forFeature(layoutFeatureKey, layoutReducer),
+    StoreDevtoolsModule.instrument({
+      name: 'Nexul Academy - Simple CRM'
+    })
   ],
   providers: [{
       provide: HTTP_INTERCEPTORS,
@@ -48,4 +56,4 @@ export class AppModule {
       iconService: AppIconsService
     )
     {}
- }
+}
